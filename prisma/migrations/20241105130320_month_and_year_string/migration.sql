@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "periodic_reports" ALTER COLUMN "month" SET DATA TYPE TEXT,
+ALTER COLUMN "year" SET DATA TYPE TEXT;

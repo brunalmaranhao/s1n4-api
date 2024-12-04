@@ -1,0 +1,278 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String              @id @default(uuid())
+  firstName          String
+  lastName           String
+  email              String              @unique
+  role               UserRoles
+  status             Status
+  password           String
+  customer           Customer?           @relation(fields: [customerId], references: [id])
+  customerId         String?
+  historyLog         HistoryLog[]
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime?           @updatedAt @map("updated_at")
+  projectUpdates     ProjectUpdates[]
+  notifications      Notification[]
+  verificationTokens VerificationToken[]
+
+  @@map("users")
+}
+
+model Customer {
+  id                    String               @id @default(uuid())
+  name                  String               @unique
+  corporateName         String               @unique // Razão Social
+  cnpj                  String               @unique
+  contractDuration      String?
+  contractValue         Float?
+  paymentMethods        PaymentMethod?
+  accumulatedInvestment Float? // Investimento Acumulado
+  expenditureProjection Float? // Projeção de gastos
+  contractObjective     String? // Objetivo do contrato
+  contractedServices    String? // serviços contratados
+  createdAt             DateTime
+  updatedAt             DateTime?
+  status                Status
+  responsibleParties    ResponsibleParties[]
+  projects              Project[]
+  users                 User[]
+  reports               Report[]
+  address               CustomerAddress[]
+
+  @@map("customers")
+}
+
+model PeriodicReports {
+  id        String    @id @default(uuid())
+  name      String
+  month     String
+  year      String
+  url       String
+  project   Project   @relation(fields: [projectId], references: [id])
+  projectId String
+  status    Status
+  createdAt DateTime
+  updatedAt DateTime?
+
+  @@map("periodic_reports")
+}
+
+model CustomerAddress {
+  id           String    @id @default(uuid())
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  country      String
+  zipCode      String
+  customer     Customer  @relation(fields: [customerId], references: [id])
+  customerId   String
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
+
+  @@map("customer_address")
+}
+
+model ResponsibleParties {
+  id                     String                   @id @default(uuid())
+  firstName              String
+  lastName               String
+  phone                  String
+  email                  String                   @unique
+  birthdate              DateTime
+  responsiblePartiesRole ResponsiblePartiesRole[]
+  customer               Customer                 @relation(fields: [customerId], references: [id])
+  customerId             String
+  status                 Status
+  createdAt              DateTime
+  updatedAt              DateTime?
+
+  @@map("responsible_parties")
+}
+
+model Project {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  deadline        DateTime?
+  statusProject   StatusProject
+  customer        Customer          @relation(fields: [customerId], references: [id])
+  customerId      String
+  createdAt       DateTime
+  updatedAt       DateTime?
+  budget          Float?
+  // integration    Integration[]
+  historyLog      HistoryLog[]
+  projectUpdates  ProjectUpdates[]
+  budgetExpenses  BudgetExpense[]
+  periodicReports PeriodicReports[]
+
+  @@map("projects")
+}
+
+model BudgetExpense {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  amount      Float
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
+
+  @@map("budget_expenses")
+}
+
+model ProjectUpdates {
+  id            String         @id @default(uuid())
+  description   String
+  project       Project        @relation(fields: [projectId], references: [id])
+  projectId     String
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String
+  createdAt     DateTime
+  updatedAt     DateTime?
+  status        Status
+  notifications Notification[]
+
+  @@map("project_updates")
+}
+
+model Notification {
+  id               String          @id @default(uuid())
+  recipient        User            @relation(fields: [recipientId], references: [id])
+  recipientId      String
+  title            String
+  content          String
+  readAt           DateTime?       @map("read_at")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  projectUpdates   ProjectUpdates? @relation(fields: [projectUpdatesId], references: [id])
+  projectUpdatesId String?
+
+  @@map("notifications")
+}
+
+model Report {
+  id             String       @id @default(uuid())
+  name           String
+  pbiReportId    String
+  pbiWorkspaceId String
+  status         Status
+  customer       Customer     @relation(fields: [customerId], references: [id])
+  customerId     String
+  // metrics        Metric[]
+  createdAt      DateTime
+  updatedAt      DateTime?
+  HistoryLog     HistoryLog[]
+
+  @@map("reports")
+}
+
+// model Metric {
+//   id        String    @id @default(uuid())
+//   key       String
+//   value     String
+//   report    Report    @relation(fields: [reportId], references: [id])
+//   reportId  String
+//   createdAt DateTime
+//   updatedAt DateTime?
+// }
+
+// model Integration {
+//   id              String          @id @default(uuid())
+//   integrationName IntegrationName
+//   project         Project         @relation(fields: [projectId], references: [id])
+//   projectId       String
+//   createdAt       DateTime
+//   updatedAt       DateTime?
+// }
+
+model HistoryLog {
+  id        String           @id @default(uuid())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
+  project   Project?         @relation(fields: [projectId], references: [id])
+  projectId String?
+  report    Report?          @relation(fields: [reportId], references: [id])
+  reportId  String?
+  action    HistoryLogAction
+  createdAt DateTime
+
+  @@map("history_logs")
+}
+
+model VerificationToken {
+  id        String                @id @default(uuid())
+  user      User                  @relation(fields: [userId], references: [id])
+  userId    String
+  token     String                @unique
+  type      VerificationTokenType
+  createAt  DateTime
+  updatedAt DateTime?
+
+  @@map("verification_tokens")
+}
+
+enum VerificationTokenType {
+  RESET_PASSWORD
+}
+
+enum HistoryLogAction {
+  ACCESS_REPORT
+  ACCESS_INFO
+  BUDGET_EXPENSE
+}
+
+enum IntegrationName {
+  OPERAND
+  MONDAY
+  INSTAGRAM
+  CALENDAR
+}
+
+enum UserRoles {
+  INTERNAL_MANAGEMENT
+  INTERNAL_PARTNERS
+  INTERNAL_FINANCIAL_LEGAL
+  CLIENT_RESPONSIBLE
+  CLIENT_OWNER
+  CLIENT_USER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum ResponsiblePartiesRole {
+  INFLUENCERS
+  CODE
+  RISKMANAGEMENT
+  OWNER
+}
+
+enum StatusProject {
+  APPROVED
+  DISAPPROVED
+  WAITING
+  CANCELED
+  DONE
+  IN_PROGRESS
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PIX
+}

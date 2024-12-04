@@ -1,0 +1,54 @@
+import { PrismaClient } from '@prisma/client'
+import { hash } from 'bcryptjs'
+import { faker } from '@faker-js/faker'
+
+export async function CreateInitialDataSeeder(prisma: PrismaClient) {
+  async function createAdminUser() {
+    const hashedPassword = await hash('admin', 8)
+    await prisma.user.create({
+      data: {
+        firstName: 'MANAGEMENT USER',
+        lastName: 'INTERNAL',
+        password: hashedPassword,
+        email: 'admin@email.com',
+        role: 'INTERNAL_MANAGEMENT',
+        createdAt: new Date(),
+        status: 'ACTIVE',
+      },
+    })
+  }
+
+  async function newCustomers() {
+    for (let x = 0; x <= 10; x++) {
+      const customer = await prisma.customer.create({
+        data: {
+          name: `Customer ${x}`,
+          cnpj: `100012132/00${x}`,
+          corporateName: `Name Customer ${x}`,
+          contractDuration: '12 meses',
+          contractValue: 100000,
+          status: 'ACTIVE',
+          createdAt: new Date(),
+        },
+      })
+
+      await prisma.customerAddress.create({
+        data: {
+          street: faker.location.street(),
+          city: faker.location.city(),
+          country: faker.location.country(),
+          state: faker.location.state(),
+          zipCode: faker.location.zipCode(),
+          neighborhood: `bairro ${x}`,
+          number: x.toString(),
+          customerId: customer.id,
+        },
+      })
+    }
+  }
+
+  return {
+    createAdminUser,
+    newCustomers,
+  }
+}
