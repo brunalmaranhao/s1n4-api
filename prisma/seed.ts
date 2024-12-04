@@ -6,8 +6,8 @@ const prisma = new PrismaClient()
 async function main() {
   const { createAdminUser, newCustomers } =
     await CreateInitialDataSeeder(prisma)
-  newCustomers()
-  // createAdminUser()
+  // newCustomers()
+  createAdminUser()
 }
 
 main()

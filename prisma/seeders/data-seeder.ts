@@ -7,10 +7,10 @@ export async function CreateInitialDataSeeder(prisma: PrismaClient) {
     const hashedPassword = await hash('admin', 8)
     await prisma.user.create({
       data: {
-        firstName: 'MANAGEMENT USER',
-        lastName: 'INTERNAL',
+        firstName: 'Yuri',
+        lastName: 'Muniz',
         password: hashedPassword,
-        email: 'admin@email.com',
+        email: 'yuri@gruposina.com',
         role: 'INTERNAL_MANAGEMENT',
         createdAt: new Date(),
         status: 'ACTIVE',
