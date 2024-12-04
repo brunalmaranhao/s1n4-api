@@ -5,17 +5,17 @@ import { faker } from '@faker-js/faker'
 export async function CreateInitialDataSeeder(prisma: PrismaClient) {
   async function createAdminUser() {
     const hashedPassword = await hash('admin', 8)
-    await prisma.user.create({
-      data: {
-        firstName: 'Yuri',
-        lastName: 'Muniz',
-        password: hashedPassword,
-        email: 'yuri@gruposina.com',
-        role: 'INTERNAL_MANAGEMENT',
-        createdAt: new Date(),
-        status: 'ACTIVE',
-      },
-    })
+    // await prisma.user.create({
+    //   data: {
+    //     firstName: 'Yuri',
+    //     lastName: 'Muniz',
+    //     password: hashedPassword,
+    //     email: 'yuri@gruposina.com',
+    //     role: 'INTERNAL_MANAGEMENT',
+    //     createdAt: new Date(),
+    //     status: 'ACTIVE',
+    //   },
+    // })
 
     await prisma.user.create({
       data: {
