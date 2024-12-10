@@ -11,12 +11,16 @@ export class PrismaProjectMapper {
       {
         name: raw.name,
         deadline: raw.deadline,
-        statusProject: raw.statusProject,
+        status: raw.status,
         customerId: new UniqueEntityID(raw.customerId),
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         customer: raw.customer,
         budget: raw.budget,
+        listProjectsId: new UniqueEntityID(raw.listProjectsId),
+        updatedListProjectAt: raw.updatedListProjectAt,
+        shouldShowInformationsToCustomerUser:
+          raw.shouldShowInformationsToCustomerUser,
       },
       new UniqueEntityID(raw.id),
     )
@@ -27,11 +31,15 @@ export class PrismaProjectMapper {
       {
         name: raw.name,
         deadline: raw.deadline,
-        statusProject: raw.statusProject,
+        status: raw.status,
         customerId: new UniqueEntityID(raw.customerId),
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         budget: raw.budget,
+        listProjectsId: new UniqueEntityID(raw.listProjectsId),
+        updatedListProjectAt: raw.updatedListProjectAt,
+        shouldShowInformationsToCustomerUser:
+          raw.shouldShowInformationsToCustomerUser,
       },
       new UniqueEntityID(raw.id),
     )
@@ -42,11 +50,15 @@ export class PrismaProjectMapper {
       id: project.id.toString(),
       name: project.name,
       deadline: project.deadline,
-      statusProject: project.statusProject,
+      status: project.status,
       customerId: project.customerId.toString(),
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
       budget: project.budget,
+      listProjectsId: project.listProjectsId.toString(),
+      updatedListProjectAt: project.updatedListProjectAt,
+      shouldShowInformationsToCustomerUser:
+        project.shouldShowInformationsToCustomerUser,
     }
   }
 }

@@ -24,6 +24,8 @@ import { BudgetExpenseRepository } from '@/domain/project/application/repositori
 import { PrismaBudgetExpenseRepository } from './prisma/repositories/prisma-budget-expense-repository'
 import { PeriodicReportRepository } from '@/domain/project/application/repositories/periodic-reports-repository'
 import { PrismaPeriodicReportsRepository } from './prisma/repositories/prisma-periodic-report-repository'
+import { ListProjectRepository } from '@/domain/project/application/repositories/list-projects-repository'
+import { PrismaListProjectRepository } from './prisma/repositories/prisma-list-projects-repository'
 
 @Module({
   providers: [
@@ -82,6 +84,10 @@ import { PrismaPeriodicReportsRepository } from './prisma/repositories/prisma-pe
       provide: PeriodicReportRepository,
       useClass: PrismaPeriodicReportsRepository,
     },
+    {
+      provide: ListProjectRepository,
+      useClass: PrismaListProjectRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -97,6 +103,7 @@ import { PrismaPeriodicReportsRepository } from './prisma/repositories/prisma-pe
     VerificationTokenRepository,
     BudgetExpenseRepository,
     PeriodicReportRepository,
+    ListProjectRepository,
   ],
 })
 export class DatabaseModule {}

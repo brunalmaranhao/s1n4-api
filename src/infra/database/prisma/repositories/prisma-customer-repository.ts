@@ -86,7 +86,7 @@ export class PrismaCustomersRepository implements CustomerRepository {
 
       await prisma.project.updateMany({
         where: { customerId: id },
-        data: { statusProject: 'CANCELED' },
+        data: { status: 'INACTIVE' },
       })
 
       await prisma.user.updateMany({

@@ -6,7 +6,7 @@ import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
   BudgetExpense,
   BudgetExpenseProps,
-} from '@/domain/project/enterprise/entities/budgetExpense'
+} from '@/domain/project/enterprise/entities/BudgetExpense'
 import { PrismaBudgetExpenseMapper } from '@/infra/database/prisma/mappers/prisma-budget-expense-mapper'
 
 export function makeBudgetExpense(

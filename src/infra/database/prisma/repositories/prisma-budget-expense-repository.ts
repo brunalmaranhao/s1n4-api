@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { BudgetExpenseRepository } from '@/domain/project/application/repositories/budget-expense'
-import { BudgetExpense } from '@/domain/project/enterprise/entities/budgetExpense'
+import { BudgetExpense } from '@/domain/project/enterprise/entities/BudgetExpense'
 import { PrismaBudgetExpenseMapper } from '../mappers/prisma-budget-expense-mapper'
 
 @Injectable()

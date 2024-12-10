@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { StatusProject } from '@prisma/client'
 
 export class UpdateProjectDto {
   @ApiProperty()
@@ -14,9 +13,9 @@ export class UpdateProjectDto {
   @ApiProperty()
   budget?: number
 
-  @ApiProperty({ enum: StatusProject, enumName: 'StatusProject' })
-  statusProject?: StatusProject
-
   @ApiProperty()
   updatedAt?: Date
+
+  @ApiProperty()
+  shouldShowInformationsToCustomerUser?: boolean
 }

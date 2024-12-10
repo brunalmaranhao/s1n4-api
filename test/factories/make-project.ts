@@ -17,8 +17,11 @@ export function makeProject(
     {
       name: faker.company.name(),
       deadline: faker.date.future(),
-      statusProject: 'WAITING',
+      status: 'ACTIVE',
       customerId: new UniqueEntityID('f6c85da2-fb10-48e9-866d-742db03abe82'),
+      listProjectsId: new UniqueEntityID(
+        'f6c85da1-fb10-48e9-866d-742db03abe82',
+      ),
       createdAt: new Date(),
       ...override,
     },

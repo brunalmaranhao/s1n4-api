@@ -28,13 +28,11 @@ import { RemoveResponsiblePartiesController } from './controllers/responsiblePar
 import { RemoveResponsiblePartiesUseCase } from '@/domain/project/application/use-cases/remove-responsible-parties'
 import { CreateProjectController } from './controllers/project/create-project.controller'
 import { CreateProjectUseCase } from '@/domain/project/application/use-cases/create-project'
-import { UpdateProjectController } from './controllers/project/update-project.controller'
 import { UpdateProjectUseCase } from '@/domain/project/application/use-cases/update-project'
 import { RemoveProjectController } from './controllers/project/remove-project.controller'
 import { RemoveProjectUseCase } from '@/domain/project/application/use-cases/remove-project'
 import { FetchRecentProjectsController } from './controllers/project/fetch-recent-projects.controller'
 import { FetchRecentProjectsUseCase } from '@/domain/project/application/use-cases/fetch-recent-projects'
-import { FetchProjectByStatusController } from './controllers/project/fetch-project-by-status.controller'
 import { FetchProjectByStatusUseCase } from '@/domain/project/application/use-cases/fetch-project-by-status'
 import { CreateInternalUserController } from './controllers/user/create-user-internal.controller'
 import { FetchCustomerUsersController } from './controllers/customer/fetch-customer-users-controller'
@@ -65,7 +63,7 @@ import { FetchResponsibleBirthdaysOfTheMonthController } from './controllers/res
 import { FetchResponsibleBirthdaysOfTheMonthUseCase } from '@/domain/project/application/use-cases/fetch-responsible-birthdays-of-the-month'
 import { PbiModule } from '../pbi/pbi.module'
 import { CreateReportController } from './controllers/report/create-report.controller'
-import { CreateReportUseCase } from '@/domain/project/application/use-cases/create-report'
+import { CreateReportUseCase } from '@/domain/project/application/use-cases/create-Report'
 import { FetchReportUseCase } from '@/domain/project/application/use-cases/fetch-report'
 import { FetchReportsUseCase } from '@/domain/project/application/use-cases/fetch-reports-customer'
 import { FetchReportPbiController } from './controllers/report/fetch-report-pbi.controller'
@@ -75,7 +73,7 @@ import { SuspendPbiCapacityController } from './controllers/report/suspend-pbi-c
 import { FetchAllProjectUpdatesController } from './controllers/project-updates/fetch-all-project-updates.controller'
 import { FetchAllProjectUpdatesUseCase } from '@/domain/project/application/use-cases/fetch-all-project-updates'
 import { ValidateCustomerController } from './controllers/customer/validate-customer.controller'
-import { ValidateCustomerUseCase } from '@/domain/project/application/use-cases/validate-customer'
+import { ValidateCustomerUseCase } from '@/domain/project/application/use-cases/Validate-customer'
 import { FetchCustomersWithUsersController } from './controllers/customer/fetch-customer-with-users.controller'
 import { FetchCustomersWithUsersUseCase } from '@/domain/project/application/use-cases/fetch-customers-with-users'
 import { CreateCustomerAddressController } from './controllers/customer-address/create-customer-address.controller'
@@ -126,6 +124,21 @@ import { FetchBudgetExpenseBalanceByCustomerController } from './controllers/bud
 import { FetchBudgetsExpenseBalanceUseCase } from '@/domain/project/application/use-cases/fetch-budget-expense-balance'
 import { FetchBudgetExpenseBalanceByProjectController } from './controllers/budget-expenses/fetch-budget-expense-balance-by-project.controller'
 import { FetchBudgetExpenseBalanceController } from './controllers/budget-expenses/fetch-budget-expense-balance.controller'
+import { CreateListProjectController } from './controllers/list-project/create-list-project.controller'
+import { CreateListProjectUseCase } from '@/domain/project/application/use-cases/create-list-project'
+import { FetchListProjectsByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-list-projects-by-customer'
+import { FetchListProjectByCustomerController } from './controllers/list-project/fetch-list-project-by-customer.controller'
+import { FetchListProjectByUserController } from './controllers/list-project/fetch-list-project-by-user.controller'
+import { FetchListProjectsByUserUseCase } from '@/domain/project/application/use-cases/fetch-list-projects-by-user'
+import { UpdateListProjectController } from './controllers/list-project/update-name-list-project.controller'
+import { UpdateListProjectUseCase } from '@/domain/project/application/use-cases/update-list-project-name'
+import { AddProjectToListProjectController } from './controllers/list-project/add-project-to-list-project.controller'
+import { AddProjectListProjectUseCase } from '@/domain/project/application/use-cases/add-project-list-project'
+import { RemoveListProjectController } from './controllers/list-project/remove-list-project.controller'
+import { RemoveListProjectUseCase } from '@/domain/project/application/use-cases/remove-list-project'
+import { UpdateOrderListProjectController } from './controllers/list-project/update-order-list-project.controller'
+import { UpdateOrderListProjectUseCase } from '@/domain/project/application/use-cases/update-order-list-project'
+import { UpdateProjectController } from './controllers/project/update-project.controller'
 
 @Module({
   imports: [
@@ -156,10 +169,8 @@ import { FetchBudgetExpenseBalanceController } from './controllers/budget-expens
     UpdateUserController,
     CreateProjectController,
     FetchProjectByIdController,
-    FetchProjectByStatusController,
     FetchRecentProjectsController,
     RemoveProjectController,
-    UpdateProjectController,
     CreateResponsiblePartiesController,
     FetchResponsibleBirthdaysOfTheDayController,
     FetchResponsibleBirthdaysOfTheMonthController,
@@ -201,6 +212,14 @@ import { FetchBudgetExpenseBalanceController } from './controllers/budget-expens
     FetchBudgetExpenseBalanceByCustomerController,
     FetchBudgetExpenseBalanceByProjectController,
     FetchBudgetExpenseBalanceController,
+    CreateListProjectController,
+    FetchListProjectByCustomerController,
+    FetchListProjectByUserController,
+    UpdateListProjectController,
+    AddProjectToListProjectController,
+    RemoveListProjectController,
+    UpdateOrderListProjectController,
+    UpdateProjectController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -262,6 +281,13 @@ import { FetchBudgetExpenseBalanceController } from './controllers/budget-expens
     FetchPeriodicReportsByUserUseCase,
     FetchPeriodicReportsByUserAndYearUseCase,
     FetchBudgetsExpenseBalanceUseCase,
+    CreateListProjectUseCase,
+    FetchListProjectsByCustomerUseCase,
+    FetchListProjectsByUserUseCase,
+    UpdateListProjectUseCase,
+    AddProjectListProjectUseCase,
+    RemoveListProjectUseCase,
+    UpdateOrderListProjectUseCase,
   ],
 })
 export class HttpModule {}

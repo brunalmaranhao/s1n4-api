@@ -23,6 +23,6 @@ describe('Remove project', () => {
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toBeNull()
-    expect(inMemoryProjectRepository.items[0].statusProject).toBe('CANCELED')
+    expect(inMemoryProjectRepository.items[0].status).toBe('INACTIVE')
   })
 })

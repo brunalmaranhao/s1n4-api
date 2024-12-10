@@ -6,7 +6,6 @@ import { InMemoryUserRepository } from 'test/repositories/in-memory-users-reposi
 import { makeUser } from 'test/factories/make-user'
 import { InMemoryProjectRepository } from 'test/repositories/in-memory-project-repository'
 import { makeProject } from 'test/factories/make-project'
-import { FetchPeriodicReportsByUserUseCase } from './fetch-period-report-by-user'
 import { FetchPeriodicReportsByUserAndYearUseCase } from './fetch-period-report-by-user-and-year'
 
 let inMemoryUserRepository: InMemoryUserRepository

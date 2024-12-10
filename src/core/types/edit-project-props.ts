@@ -1,10 +1,11 @@
-import { StatusProject } from '@prisma/client'
+import { Status } from '@prisma/client'
 
 export interface EditProjectProps {
   name?: string
   deadline?: Date | null
-  statusProject?: StatusProject
+  status?: Status
   customerId?: string
   updatedAt?: Date
   budget?: number | null
+  shouldShowInformationsToCustomerUser?: boolean
 }

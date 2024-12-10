@@ -12,7 +12,7 @@ import { Roles } from '@/infra/auth/roles.decorator'
 import { z } from 'zod'
 import { CreateReportDto } from './dto/create-report-dto'
 import { ReportAlreadyExistsError } from '@/domain/project/application/use-cases/errors/report-already-exists-error'
-import { CreateReportUseCase } from '@/domain/project/application/use-cases/create-report'
+import { CreateReportUseCase } from '@/domain/project/application/use-cases/create-Report'
 
 const createReportBodySchema = z.object({
   name: z.string(),
