@@ -13,13 +13,13 @@ import { z } from 'zod'
 import { CreateProjectDto } from './dto/create-project-dto'
 import { ProjectAlreadyExistsError } from '@/domain/project/application/use-cases/errors/project-already-exists'
 import { CreateProjectUseCase } from '@/domain/project/application/use-cases/create-project'
-import { ProjectPresenter } from '../../presenter/project-presenter'
 
 const createProjectBodySchema = z.object({
   name: z.string(),
   deadline: z.coerce.date().optional(),
   customerId: z.string(),
   budget: z.number(),
+  listProjectsId: z.string(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createProjectBodySchema)
@@ -37,7 +37,7 @@ export class CreateProjectController {
     'INTERNAL_FINANCIAL_LEGAL',
   ])
   async handle(@Body(bodyValidationPipe) body: CreateProjectDto) {
-    const { name, customerId, deadline, budget } = body
+    const { name, customerId, deadline, budget, listProjectsId } = body
 
     const deadlineDate = deadline ? new Date(deadline) : null
 
@@ -46,6 +46,7 @@ export class CreateProjectController {
       customerId,
       deadline: deadlineDate,
       budget,
+      listProjectsId,
     })
 
     if (result.isLeft()) {

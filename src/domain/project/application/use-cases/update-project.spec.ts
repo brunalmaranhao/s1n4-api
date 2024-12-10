@@ -23,7 +23,7 @@ describe('Update Project', () => {
         name: 'Novo nome de projeto',
         deadline: new Date('2025-04-05'),
         customerId: project.customerId.toString(),
-        statusProject: 'APPROVED',
+        status: 'ACTIVE',
         updatedAt: new Date(),
       },
     })
@@ -33,7 +33,7 @@ describe('Update Project', () => {
     if (result.isRight()) {
       expect(result.value.project.name).toEqual('Novo nome de projeto')
       expect(result.value.project.deadline).toEqual(new Date('2025-04-05'))
-      expect(result.value.project.statusProject).toEqual('APPROVED')
+      expect(result.value.project.status).toEqual('ACTIVE')
       expect(result.value.project.customerId).toEqual(project.customerId)
     }
   })

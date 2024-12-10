@@ -7,7 +7,7 @@ export class ProjectPresenter {
       name: project.name,
       customerId: project.customerId.toString(),
       deadline: project.deadline,
-      statusProject: project.statusProject,
+      status: project.status,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
       customer: project.customer,

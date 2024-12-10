@@ -11,28 +11,18 @@ import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { Roles } from '@/infra/auth/roles.decorator'
 import { UpdateProjectDto } from './dto/update-project-dto'
-import { StatusProject } from '@prisma/client'
 import { ProjectNotFoundError } from '@/domain/project/application/use-cases/errors/project-not-found-error'
 import { EditProjectProps } from '@/core/types/edit-project-props'
 import { UpdateProjectUseCase } from '@/domain/project/application/use-cases/update-project'
-
-const StatusProjectEnum = z.enum([
-  'APPROVED',
-  'DISAPPROVED',
-  'WAITING',
-  'CANCELED',
-  'DONE',
-  'IN_PROGRESS',
-])
 
 const updateProjectBodySchema = z
   .object({
     name: z.string().optional(),
     deadline: z.coerce.date().optional(),
-    statusProject: StatusProjectEnum.optional(),
     customerId: z.string().optional(),
     updatedAt: z.coerce.date().optional(),
     budget: z.number().optional(),
+    shouldShowInformationsToCustomerUser: z.boolean().optional(),
   })
   .refine(
     (data) => {
@@ -62,16 +52,22 @@ export class UpdateProjectController {
     @Body(bodyValidationPipe) body: UpdateProjectDto,
     @Param('id') id: string,
   ) {
-    const { name, deadline, statusProject, customerId, updatedAt, budget } =
-      body
+    const {
+      name,
+      deadline,
+      customerId,
+      updatedAt,
+      budget,
+      shouldShowInformationsToCustomerUser,
+    } = body
 
     const project: EditProjectProps = {
       name,
       deadline: deadline ?? undefined,
-      statusProject,
       customerId,
       updatedAt: updatedAt ?? undefined,
       budget,
+      shouldShowInformationsToCustomerUser,
     }
 
     const result = await this.updateProjectUseCase.execute({

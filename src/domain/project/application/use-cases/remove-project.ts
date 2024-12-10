@@ -26,10 +26,6 @@ export class RemoveProjectUseCase {
       return left(new ProjectNotFoundError())
     }
 
-    if (project.statusProject === 'CANCELED') {
-      return left(new ProjectAlreadyCanceledError())
-    }
-
     await this.projectRepository.remove(id)
 
     return right(null)

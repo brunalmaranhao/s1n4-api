@@ -1,21 +1,40 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
-import { StatusProject, Customer as PrismaCustomer } from '@prisma/client'
+import { Customer as PrismaCustomer, Status } from '@prisma/client'
 import { Customer } from './customer'
 
 export interface ProjectProps {
   name: string
   deadline?: Date | null
-  statusProject: StatusProject
+  status: Status
   customerId: UniqueEntityID
   createdAt: Date
   updatedAt?: Date | null
   customer?: Customer | PrismaCustomer | null
   budget?: number | null
+  listProjectsId: UniqueEntityID
+  updatedListProjectAt?: Date | null
+  shouldShowInformationsToCustomerUser: boolean
 }
 
 export class Project extends Entity<ProjectProps> {
+  get shouldShowInformationsToCustomerUser() {
+    return this.props.shouldShowInformationsToCustomerUser
+  }
+
+  get updatedListProjectAt() {
+    return this.props.updatedListProjectAt
+  }
+
+  get listProjectsId() {
+    return this.props.listProjectsId
+  }
+
+  set listProjectsId(listProjectsId) {
+    this.props.listProjectsId = listProjectsId
+  }
+
   get customer() {
     return this.props.customer
   }
@@ -48,12 +67,12 @@ export class Project extends Entity<ProjectProps> {
     this.props.deadline = deadline
   }
 
-  get statusProject() {
-    return this.props.statusProject
+  get status() {
+    return this.props.status
   }
 
-  set statusProject(statusProject: StatusProject) {
-    this.props.statusProject = statusProject
+  set status(status: Status) {
+    this.props.status = status
   }
 
   get updatedAt(): Date | null | undefined {
@@ -69,15 +88,20 @@ export class Project extends Entity<ProjectProps> {
   }
 
   static create(
-    props: Optional<ProjectProps, 'createdAt' | 'statusProject' | 'budget'>,
+    props: Optional<
+      ProjectProps,
+      'createdAt' | 'status' | 'budget' | 'shouldShowInformationsToCustomerUser'
+    >,
     id?: UniqueEntityID,
   ) {
     const project = new Project(
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
-        statusProject: props.statusProject ?? 'WAITING',
+        status: props.status ?? 'ACTIVE',
         budget: props.budget ?? 0,
+        shouldShowInformationsToCustomerUser:
+          props.shouldShowInformationsToCustomerUser ?? true,
       },
       id,
     )

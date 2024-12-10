@@ -1,6 +1,3 @@
-import { InMemoryProjectRepository } from 'test/repositories/in-memory-project-repository'
-import { FetchProjectByStatusUseCase } from './fetch-project-by-status'
-import { makeProject } from 'test/factories/make-project'
 import { FetchResponsiblePartiesByIdUseCase } from './fetch-responsible-parties-by-id'
 import { InMemoryResponsiblePartiesRepository } from 'test/repositories/in-memory-responsible-parties'
 import { makeResponsibleParties } from 'test/factories/make-responsible-parties'
