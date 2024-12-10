@@ -12,4 +12,7 @@ export class CreateProjectDto {
 
   @ApiProperty()
   budget!: number
+
+  @ApiProperty()
+  listProjectsId!: string
 }

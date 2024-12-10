@@ -30,6 +30,20 @@ model User {
   @@map("users")
 }
 
+model ListProjects {
+  id         String    @id @default(uuid())
+  name       String
+  projects   Project[]
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  customerId String
+  status     Status
+  order      Int       @default(0)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+
+  @@map("list_projects")
+}
+
 model Customer {
   id                    String               @id @default(uuid())
   name                  String               @unique
@@ -50,6 +64,7 @@ model Customer {
   users                 User[]
   reports               Report[]
   address               CustomerAddress[]
+  ListProjects          ListProjects[]
 
   @@map("customers")
 }
@@ -105,20 +120,24 @@ model ResponsibleParties {
 }
 
 model Project {
-  id              String            @id @default(uuid())
-  name            String            @unique
-  deadline        DateTime?
-  statusProject   StatusProject
-  customer        Customer          @relation(fields: [customerId], references: [id])
-  customerId      String
-  createdAt       DateTime
-  updatedAt       DateTime?
-  budget          Float?
+  id                   String            @id @default(uuid())
+  name                 String            
+  deadline             DateTime?
+  status               Status
+  customer             Customer          @relation(fields: [customerId], references: [id])
+  customerId           String
+  createdAt            DateTime
+  updatedAt            DateTime?
+  updatedListProjectAt DateTime?
+  budget               Float?
   // integration    Integration[]
-  historyLog      HistoryLog[]
-  projectUpdates  ProjectUpdates[]
-  budgetExpenses  BudgetExpense[]
-  periodicReports PeriodicReports[]
+  historyLog           HistoryLog[]
+  projectUpdates       ProjectUpdates[]
+  budgetExpenses       BudgetExpense[]
+  periodicReports      PeriodicReports[]
+  listProjects         ListProjects      @relation(fields: [listProjectsId], references: [id])
+  listProjectsId       String
+  shouldShowInformationsToCustomerUser Boolean @default(true)
 
   @@map("projects")
 }

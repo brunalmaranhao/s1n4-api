@@ -1,5 +1,5 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
-import { BudgetExpense } from '../../enterprise/entities/budgetExpense'
+import { BudgetExpense } from '../../enterprise/entities/BudgetExpense'
 
 export abstract class BudgetExpenseRepository {
   abstract create(budgetExpense: BudgetExpense): Promise<BudgetExpense>

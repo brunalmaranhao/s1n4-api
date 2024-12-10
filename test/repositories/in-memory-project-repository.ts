@@ -4,10 +4,25 @@ import { EditProjectProps } from '@/core/types/edit-project-props'
 import { ProjectRepository } from '@/domain/project/application/repositories/project-repository'
 import { ProjectNotFoundError } from '@/domain/project/application/use-cases/errors/project-not-found-error'
 import { Project } from '@/domain/project/enterprise/entities/project'
-import { $Enums, Status } from '@prisma/client'
+import { Status } from '@prisma/client'
 
 export class InMemoryProjectRepository implements ProjectRepository {
   public items: Project[] = []
+  async addProjectList(
+    projectId: string,
+    listProjectId: string,
+  ): Promise<void> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === projectId,
+    )
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    existingProject.listProjectsId = new UniqueEntityID(listProjectId)
+  }
 
   async fetchCustomerProjects(customerId: string): Promise<Project[]> {
     const projects = this.items.filter(
@@ -59,8 +74,7 @@ export class InMemoryProjectRepository implements ProjectRepository {
     existingProject.name = project.name ?? existingProject.name
     existingProject.deadline =
       project.deadline ?? existingProject.deadline ?? null
-    existingProject.statusProject =
-      project.statusProject ?? existingProject.statusProject
+    existingProject.status = project.status ?? existingProject.status
     existingProject.customerId = project.customerId
       ? new UniqueEntityID(project.customerId)
       : existingProject.customerId
@@ -75,14 +89,14 @@ export class InMemoryProjectRepository implements ProjectRepository {
     if (projectIndex === -1) {
       throw new ProjectNotFoundError()
     }
-    this.items[projectIndex].statusProject = 'CANCELED'
+    this.items[projectIndex].status = 'INACTIVE'
   }
 
   async fetchByStatus(
-    status: $Enums.StatusProject,
+    status: Status,
     { page, size }: PaginationParams,
   ): Promise<Project[]> {
-    const projects = this.items.filter((item) => item.statusProject === status)
+    const projects = this.items.filter((item) => item.status === status)
     return projects
   }
 }

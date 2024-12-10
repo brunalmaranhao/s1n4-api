@@ -5,7 +5,7 @@ import { ProjectRepository } from '@/domain/project/application/repositories/pro
 import { Project } from '@/domain/project/enterprise/entities/project'
 import { PrismaProjectMapper } from '../mappers/prisma-project-mapper'
 import { EditProjectProps } from '@/core/types/edit-project-props'
-import { $Enums } from '@prisma/client'
+import { Status } from '@prisma/client'
 
 @Injectable()
 export class PrismaProjectRepository implements ProjectRepository {
@@ -15,9 +15,6 @@ export class PrismaProjectRepository implements ProjectRepository {
     const projects = await this.prisma.project.findMany({
       where: {
         customerId,
-        statusProject: {
-          not: 'CANCELED',
-        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -31,13 +28,13 @@ export class PrismaProjectRepository implements ProjectRepository {
   }
 
   async fetchByStatus(
-    status: $Enums.StatusProject,
+    status: Status,
     { page, size }: PaginationParams,
   ): Promise<Project[]> {
     const amount = size || 20
     const projects = await this.prisma.project.findMany({
       where: {
-        statusProject: status,
+        status,
       },
       orderBy: {
         createdAt: 'desc',
@@ -55,7 +52,7 @@ export class PrismaProjectRepository implements ProjectRepository {
         id,
       },
       data: {
-        statusProject: 'CANCELED',
+        status: 'INACTIVE',
         updatedAt: new Date(),
       },
     })
@@ -67,10 +64,12 @@ export class PrismaProjectRepository implements ProjectRepository {
       data: {
         name: project.name,
         deadline: project.deadline,
-        statusProject: project.statusProject,
+        status: project.status,
         customerId: project.customerId,
         budget: project.budget,
         updatedAt: new Date(),
+        shouldShowInformationsToCustomerUser:
+          project.shouldShowInformationsToCustomerUser,
       },
     })
 
@@ -78,9 +77,27 @@ export class PrismaProjectRepository implements ProjectRepository {
   }
 
   async findByName(name: string): Promise<Project | null> {
-    const project = await this.prisma.project.findUnique({
+    const project = await this.prisma.project.findFirst({
       where: {
         name,
+      },
+    })
+
+    if (!project) {
+      return null
+    }
+
+    return PrismaProjectMapper.toDomain(project)
+  }
+
+  async findByNameAndCustomer(
+    name: string,
+    customerId: string,
+  ): Promise<Project | null> {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        name,
+        customerId,
       },
     })
 
@@ -113,8 +130,8 @@ export class PrismaProjectRepository implements ProjectRepository {
           customer: true,
         },
         where: {
-          statusProject: {
-            not: 'CANCELED',
+          status: {
+            not: 'INACTIVE',
           },
         },
         orderBy: {
@@ -151,5 +168,41 @@ export class PrismaProjectRepository implements ProjectRepository {
       data,
     })
     return PrismaProjectMapper.toDomain(newProject)
+  }
+
+  async addProjectList(
+    projectId: string,
+    listProjectId: string,
+    shouldSaveUpdateDate: boolean,
+  ): Promise<void> {
+    console.log(shouldSaveUpdateDate)
+    const updateData: Record<string, any> = {
+      listProjectsId: listProjectId,
+    }
+
+    if (shouldSaveUpdateDate) {
+      updateData.updatedListProjectAt = new Date()
+    }
+
+    await this.prisma.project.update({
+      where: {
+        id: projectId,
+      },
+      data: updateData,
+    })
+  }
+
+  async updateShouldShowInformationsToCustomerUser(
+    id: string,
+    value: boolean,
+  ): Promise<void> {
+    await this.prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        shouldShowInformationsToCustomerUser: value,
+      },
+    })
   }
 }
