@@ -1,4 +1,4 @@
-import { BudgetExpense } from '@/domain/project/enterprise/entities/BudgetExpense'
+import { BudgetExpense } from '@/domain/project/enterprise/entities/budgetExpense'
 
 export class BudgetExpensePresenter {
   static toHTTP(budgetExpense: BudgetExpense) {

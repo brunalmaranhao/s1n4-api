@@ -1,5 +1,5 @@
 import { makeReport } from 'test/factories/make-report'
-import { CreateReportUseCase } from './create-Report'
+import { CreateReportUseCase } from './create-report'
 import { InMemoryReportRepository } from 'test/repositories/in-memory-report-repository'
 
 let inMemoryReportRepository: InMemoryReportRepository
