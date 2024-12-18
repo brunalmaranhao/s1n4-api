@@ -139,6 +139,10 @@ import { RemoveListProjectUseCase } from '@/domain/project/application/use-cases
 import { UpdateOrderListProjectController } from './controllers/list-project/update-order-list-project.controller'
 import { UpdateOrderListProjectUseCase } from '@/domain/project/application/use-cases/update-order-list-project'
 import { UpdateProjectController } from './controllers/project/update-project.controller'
+import { UpdateBudgetExpenseController } from './controllers/budget-expenses/update-budget-expense.controller'
+import { UpdateBudgetExpenseUseCase } from '@/domain/project/application/use-cases/update-budget-expense'
+import { RemoveBudgetExpenseController } from './controllers/budget-expenses/remove-budget-expense.controller'
+import { RemoveBudgetExpenseUseCase } from '@/domain/project/application/use-cases/remove-budget-expense'
 
 @Module({
   imports: [
@@ -206,6 +210,8 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     FetchBudgetExpenseByProjectController,
     FetchBudgetExpenseController,
     FetchBudgetExpenseByCustomerController,
+    UpdateBudgetExpenseController,
+    RemoveBudgetExpenseController,
     PeriodicReportController,
     FetchPeriodicReportsByUserController,
     FetchPeriodicReportsByYearController,
@@ -288,6 +294,8 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     AddProjectListProjectUseCase,
     RemoveListProjectUseCase,
     UpdateOrderListProjectUseCase,
+    UpdateBudgetExpenseUseCase,
+    RemoveBudgetExpenseUseCase,
   ],
 })
 export class HttpModule {}

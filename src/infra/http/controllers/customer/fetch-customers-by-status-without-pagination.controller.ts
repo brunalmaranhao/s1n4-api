@@ -43,7 +43,7 @@ export class FetchCustomersWithoutPaginationController {
 
     const customers = result.value.customers
 
-    const response = customers.map(CustomerPresenter.toHTTP)
+    const response = customers.map(CustomerPresenter.toHTTPWithProjects)
 
     return { customers: response, total: result.value.total }
   }

@@ -17,6 +17,7 @@ export class BudgetExpensePresenter {
         id: budgetExpense.project?.customer.id,
         name: budgetExpense.project?.customer.name,
       },
+      status: budgetExpense.status,
     }
   }
 }
