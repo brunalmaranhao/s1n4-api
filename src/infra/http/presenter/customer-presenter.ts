@@ -63,4 +63,24 @@ export class CustomerPresenter {
       users: customer.users,
     }
   }
+
+  static toHTTPWithProjects(customer: Customer) {
+    return {
+      id: customer.id.toString(),
+      name: customer.name,
+      cnpj: customer.cnpj,
+      corporateName: customer.corporateName,
+      zipCode:
+        customer.address &&
+        customer.address?.length >= 1 &&
+        customer.address[0].zipCode,
+      accumulatedInvestment: customer.accumulatedInvestment,
+      contractDuration: customer.contractDuration,
+      contractObjective: customer.contractObjective,
+      contractValue: customer.contractValue,
+      contractedServices: customer.contractedServices,
+      status: customer.status,
+      projects: customer.projects,
+    }
+  }
 }

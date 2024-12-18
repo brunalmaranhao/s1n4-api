@@ -18,6 +18,7 @@ export interface BudgetExpenseProps {
   projectId: UniqueEntityID
   createdAt: Date
   project?: ProjectWithCustomerProps
+  status?: 'ACTIVE' | 'INACTIVE'
 }
 
 export class BudgetExpense extends Entity<BudgetExpenseProps> {
@@ -43,6 +44,10 @@ export class BudgetExpense extends Entity<BudgetExpenseProps> {
 
   get createdAt() {
     return this.props.createdAt
+  }
+
+  get status() {
+    return this.props.status
   }
 
   static create(

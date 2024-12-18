@@ -12,6 +12,10 @@ type PrismaCustomerProps = PrismaCustomer & {
   address?: CustomerAddress[]
 }
 
+type PrismaCustomerWithProjectProps = PrismaCustomer & {
+  projects: PrismaProject[]
+}
+
 type PrismaCustomerWithUsersProps = PrismaCustomer & {
   users?: PrismaUser[]
 }
@@ -44,6 +48,27 @@ export class PrismaCustomerMapper {
         status: raw.status,
         createdAt: raw.createdAt,
         address: raw.address,
+      },
+      new UniqueEntityID(raw.id),
+    )
+  }
+
+  static toDomainWithProjects(raw: PrismaCustomerWithProjectProps): Customer {
+    return Customer.create(
+      {
+        name: raw.name,
+        corporateName: raw.corporateName,
+        cnpj: raw.cnpj,
+        contractDuration: raw.contractDuration,
+        contractValue: raw.contractValue,
+        paymentMethods: raw.paymentMethods,
+        accumulatedInvestment: raw.accumulatedInvestment,
+        expenditureProjection: raw.expenditureProjection,
+        contractObjective: raw.contractObjective,
+        contractedServices: raw.contractedServices,
+        status: raw.status,
+        createdAt: raw.createdAt,
+        projects: raw.projects,
       },
       new UniqueEntityID(raw.id),
     )

@@ -199,6 +199,7 @@ export class PrismaCustomersRepository implements CustomerRepository {
         },
         include: {
           address: true,
+          projects: true,
         },
       }),
       this.prisma.customer.count({
@@ -209,7 +210,7 @@ export class PrismaCustomersRepository implements CustomerRepository {
     ])
 
     return {
-      customers: customers.map(PrismaCustomerMapper.toDomainWithAddress),
+      customers: customers.map(PrismaCustomerMapper.toDomainWithProjects),
       total,
     }
   }

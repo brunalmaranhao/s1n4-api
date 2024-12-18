@@ -4,10 +4,41 @@ import { PaginationParams } from '@/core/repositories/pagination-params'
 import { BudgetExpenseRepository } from '@/domain/project/application/repositories/budget-expense'
 import { BudgetExpense } from '@/domain/project/enterprise/entities/budgetExpense'
 import { PrismaBudgetExpenseMapper } from '../mappers/prisma-budget-expense-mapper'
+import { UpdateBudgetExpenseProps } from '@/core/types/budget-expense-props'
 
 @Injectable()
 export class PrismaBudgetExpenseRepository implements BudgetExpenseRepository {
   constructor(private prisma: PrismaService) {}
+
+  async remove(id: string): Promise<void> {
+    await this.prisma.budgetExpense.update({
+      where: {
+        id,
+      },
+      data: {
+        status: 'INACTIVE',
+      },
+    })
+  }
+
+  async update(
+    budgetExpenseId: string,
+    payload: UpdateBudgetExpenseProps,
+  ): Promise<BudgetExpense> {
+    const updatedBudgetExpense = await this.prisma.budgetExpense.update({
+      where: {
+        id: budgetExpenseId,
+      },
+      data: {
+        projectId: payload.projectId,
+        title: payload.title,
+        amount: payload.value,
+        description: payload.description,
+      },
+    })
+
+    return PrismaBudgetExpenseMapper.toDomain(updatedBudgetExpense)
+  }
 
   async findAll({ page, size }: PaginationParams): Promise<{
     budgetExpenses: BudgetExpense[]
@@ -16,6 +47,9 @@ export class PrismaBudgetExpenseRepository implements BudgetExpenseRepository {
     const amount = size || 20
     const [budgetExpenses, total] = await this.prisma.$transaction([
       this.prisma.budgetExpense.findMany({
+        where: {
+          status: 'ACTIVE',
+        },
         include: {
           project: {
             include: {
