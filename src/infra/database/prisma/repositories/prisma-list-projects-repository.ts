@@ -73,10 +73,21 @@ export class PrismaListProjectRepository implements ListProjectRepository {
       include: {
         projects: {
           where: {
-            status: 'ACTIVE',
+            status: {
+              not: 'INACTIVE',
+            },
           },
           include: {
             customer: true,
+            tags: {
+              where: {
+                status: 'ACTIVE',
+              },
+              orderBy: {
+                createdAt: 'asc',
+              },
+            },
+            listProjects: true,
           },
         },
       },

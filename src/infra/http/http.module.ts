@@ -143,6 +143,24 @@ import { UpdateBudgetExpenseController } from './controllers/budget-expenses/upd
 import { UpdateBudgetExpenseUseCase } from '@/domain/project/application/use-cases/update-budget-expense'
 import { RemoveBudgetExpenseController } from './controllers/budget-expenses/remove-budget-expense.controller'
 import { RemoveBudgetExpenseUseCase } from '@/domain/project/application/use-cases/remove-budget-expense'
+import { FetchStatisticsController } from './controllers/project/fetch-statistics-done-all-projects.controller'
+import { FetchProjectByStatusAndCustomerUseCase } from '@/domain/project/application/use-cases/fetch-project-by-status-and-customer'
+import { FetchStatisticsProjectsCustomerController } from './controllers/project/fetch-statistics-projects-customer.controller'
+import { CreateTagController } from './controllers/tags/create-tag.controller'
+import { CreateTagUseCase } from '@/domain/project/application/use-cases/create-tag'
+import { UpdateTagController } from './controllers/tags/update-tag.controller'
+import { UpdateTagUseCase } from '@/domain/project/application/use-cases/update-tag'
+import { RemoveTagUseCase } from '@/domain/project/application/use-cases/remove-tag'
+import { RemoveTagController } from './controllers/tags/remove-tag.controller'
+import { FetchTagByCustomerController } from './controllers/tags/fetch-tags-by-customer.controller'
+import { FetchTagsByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-tags-by-customer'
+import { AddTagToProjectController } from './controllers/project/add-tag-to-project.controller'
+import { AddTagToProjectUseCase } from '@/domain/project/application/use-cases/add-tag-project'
+import { FetchTagByIdUseCase } from '@/domain/project/application/use-cases/fetch-tag-by-id'
+import { RemoveTagFromProjectController } from './controllers/project/remove-tag-from-project.controller'
+import { RemoveTagFromProjectUseCase } from '@/domain/project/application/use-cases/remove-tag-project'
+import { SearchTagByCustomerController } from './controllers/tags/search-tag.controller'
+import { SearchTagByNameAndCustomerUseCase } from '@/domain/project/application/use-cases/search-tag-by-name-and-customer'
 
 @Module({
   imports: [
@@ -226,6 +244,15 @@ import { RemoveBudgetExpenseUseCase } from '@/domain/project/application/use-cas
     RemoveListProjectController,
     UpdateOrderListProjectController,
     UpdateProjectController,
+    FetchStatisticsController,
+    FetchStatisticsProjectsCustomerController,
+    CreateTagController,
+    UpdateTagController,
+    RemoveTagController,
+    FetchTagByCustomerController,
+    AddTagToProjectController,
+    RemoveTagFromProjectController,
+    SearchTagByCustomerController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -296,6 +323,15 @@ import { RemoveBudgetExpenseUseCase } from '@/domain/project/application/use-cas
     UpdateOrderListProjectUseCase,
     UpdateBudgetExpenseUseCase,
     RemoveBudgetExpenseUseCase,
+    FetchProjectByStatusAndCustomerUseCase,
+    CreateTagUseCase,
+    UpdateTagUseCase,
+    RemoveTagUseCase,
+    FetchTagsByCustomerUseCase,
+    AddTagToProjectUseCase,
+    FetchTagByIdUseCase,
+    RemoveTagFromProjectUseCase,
+    SearchTagByNameAndCustomerUseCase,
   ],
 })
 export class HttpModule {}

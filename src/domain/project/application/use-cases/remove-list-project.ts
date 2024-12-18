@@ -3,12 +3,16 @@ import { Injectable } from '@nestjs/common'
 import { ListProjectRepository } from '../repositories/list-projects-repository'
 import { ListProjectNotFoundError } from './errors/list-project-not-found-error'
 import { ProjectRepository } from '../repositories/project-repository'
+import { ListProjectCannotBeDeletedError } from './errors/list-project-cannot-be-deleted'
 
 interface RemoveListProjectUseCaseRequest {
   id: string
 }
 
-type RemoveListProjectUseCaseResponse = Either<ListProjectNotFoundError, null>
+type RemoveListProjectUseCaseResponse = Either<
+  ListProjectNotFoundError | ListProjectCannotBeDeletedError,
+  null
+>
 
 @Injectable()
 export class RemoveListProjectUseCase {
@@ -24,6 +28,9 @@ export class RemoveListProjectUseCase {
 
     if (!listProject) {
       return left(new ListProjectNotFoundError())
+    }
+    if (listProject.isDone) {
+      return left(new ListProjectCannotBeDeletedError())
     }
 
     await this.listProjectRepository.remove(id)

@@ -8,4 +8,5 @@ export interface EditProjectProps {
   updatedAt?: Date
   budget?: number | null
   shouldShowInformationsToCustomerUser?: boolean
+  finishedAt?: Date | null
 }

@@ -18,6 +18,7 @@ import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ExistCustomerSameCorporateNameError } from '@/domain/project/application/use-cases/errors/exist-customer-same-corporate-name-error'
 import { ExistCustomerSameNameError } from '@/domain/project/application/use-cases/errors/exist-customer-same-name-error'
 import { ExistCustomerSameCnpjError } from '@/domain/project/application/use-cases/errors/exist-customer-same-cnpj-error'
+import { CreateListProjectUseCase } from '@/domain/project/application/use-cases/create-list-project'
 
 const PaymentMethodSchema = z.enum(['CREDIT_CARD', 'PIX'])
 
@@ -45,7 +46,10 @@ const bodyValidationPipe = new ZodValidationPipe(createCustomerBodySchema)
 @ApiTags('customer')
 @Controller('/customer')
 export class CreateCustomerController {
-  constructor(private createCustomerUseCase: CreateCustomerUseCase) {}
+  constructor(
+    private createCustomerUseCase: CreateCustomerUseCase,
+    private createListProjectUseCase: CreateListProjectUseCase,
+  ) {}
 
   @Post()
   @HttpCode(201)
@@ -137,6 +141,15 @@ export class CreateCustomerController {
     }
 
     const { customer: newCustomer } = result.value
+    const listProjectsNames = ['A fazer', 'Em andamento', 'Finalizados']
+
+    for (const listProject of listProjectsNames) {
+      await this.createListProjectUseCase.execute({
+        name: listProject,
+        customerId: newCustomer.id.toString(),
+        isDone: listProject === 'Finalizados',
+      })
+    }
 
     return { customerId: newCustomer.id.toString() }
   }

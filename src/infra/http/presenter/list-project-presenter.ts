@@ -10,6 +10,7 @@ export class ListProjectPresenter {
       createdAt: listProject.createdAt,
       updatedAt: listProject.updatedAt,
       projects: listProject.projects,
+      isDone: listProject.isDone,
     }
   }
 }

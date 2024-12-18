@@ -8,6 +8,7 @@ import { ListProjects } from '../../enterprise/entities/listProjects'
 interface CreateListProjectUseCaseRequest {
   name: string
   customerId: string
+  isDone?: boolean
 }
 
 type CreateListProjectUseCaseResponse = Either<
@@ -24,13 +25,14 @@ export class CreateListProjectUseCase {
   async execute({
     name,
     customerId,
+    isDone,
   }: CreateListProjectUseCaseRequest): Promise<CreateListProjectUseCaseResponse> {
     const listProjectAlreadyExists =
       await this.listProjectRepository.findByNameAndCustomerId(customerId, name)
 
     if (
       listProjectAlreadyExists &&
-      listProjectAlreadyExists.status === 'INACTIVE'
+      listProjectAlreadyExists.status === 'ACTIVE'
     ) {
       return left(new ListProjectAlreadyExistsError())
     }
@@ -46,6 +48,7 @@ export class CreateListProjectUseCase {
       name,
       customerId: new UniqueEntityID(customerId),
       order: finalOrder + 1,
+      isDone: isDone ?? false,
     })
 
     const listProject = await this.listProjectRepository.create(newListProject)

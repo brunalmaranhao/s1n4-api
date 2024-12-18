@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { ListProjectRepository } from '../repositories/list-projects-repository'
 import { ListProjectNotFoundError } from './errors/list-project-not-found-error'
 import { ListProjects } from '../../enterprise/entities/listProjects'
+import { ListProjectCannotBeEditedError } from './errors/list-project-cannot-be-edited'
 
 interface UpdateListProjectUseCaseRequest {
   id: string
@@ -10,7 +11,7 @@ interface UpdateListProjectUseCaseRequest {
 }
 
 type UpdateListProjectUseCaseResponse = Either<
-  ListProjectNotFoundError,
+  ListProjectNotFoundError | ListProjectCannotBeEditedError,
   {
     listProject: ListProjects
   }
@@ -24,11 +25,15 @@ export class UpdateListProjectUseCase {
     id,
     name,
   }: UpdateListProjectUseCaseRequest): Promise<UpdateListProjectUseCaseResponse> {
-    const listProjectAlreadyExistsError =
+    const listProjectAlreadyExists =
       await this.listProjectRepository.findById(id)
 
-    if (!listProjectAlreadyExistsError) {
+    if (!listProjectAlreadyExists) {
       return left(new ListProjectNotFoundError())
+    }
+
+    if (listProjectAlreadyExists.isDone) {
+      return left(new ListProjectCannotBeEditedError())
     }
 
     const listProject = await this.listProjectRepository.update(id, name)

@@ -51,6 +51,8 @@ export class AddProjectListProjectUseCase {
       shouldSaveUpdateDate,
     )
 
+    await this.projectRepository.finishOrActive(projectId, listProject.isDone)
+
     return right({ listProjectId })
   }
 }

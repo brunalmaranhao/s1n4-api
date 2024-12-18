@@ -12,9 +12,14 @@ export interface ListProjectsProps {
   updatedAt?: Date | null
   projects?: PrismaProject[] | Project[] | null
   order: number
+  isDone: boolean
 }
 
 export class ListProjects extends Entity<ListProjectsProps> {
+  get isDone() {
+    return this.props.isDone
+  }
+
   get order() {
     return this.props.order
   }
@@ -56,7 +61,7 @@ export class ListProjects extends Entity<ListProjectsProps> {
   }
 
   static create(
-    props: Optional<ListProjectsProps, 'createdAt' | 'status'>,
+    props: Optional<ListProjectsProps, 'createdAt' | 'status' | 'isDone'>,
     id?: UniqueEntityID,
   ) {
     const listProjects = new ListProjects(
@@ -64,6 +69,7 @@ export class ListProjects extends Entity<ListProjectsProps> {
         ...props,
         createdAt: props.createdAt ?? new Date(),
         status: props.status ?? 'ACTIVE',
+        isDone: props.isDone ?? false,
       },
       id,
     )
