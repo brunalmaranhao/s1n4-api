@@ -47,6 +47,9 @@ export class PrismaBudgetExpenseRepository implements BudgetExpenseRepository {
     const amount = size || 20
     const [budgetExpenses, total] = await this.prisma.$transaction([
       this.prisma.budgetExpense.findMany({
+        where: {
+          status: 'ACTIVE',
+        },
         include: {
           project: {
             include: {
