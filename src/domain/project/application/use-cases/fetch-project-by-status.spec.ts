@@ -20,7 +20,6 @@ describe('Fetch projects by status', () => {
     projects.forEach((project) => inMemoryProjectRepository.create(project))
 
     const result = await sut.execute({
-      page: 1,
       status: 'ACTIVE',
     })
 

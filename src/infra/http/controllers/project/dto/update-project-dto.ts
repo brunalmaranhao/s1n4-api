@@ -18,4 +18,7 @@ export class UpdateProjectDto {
 
   @ApiProperty()
   shouldShowInformationsToCustomerUser?: boolean
+
+  @ApiProperty()
+  finishedAt?: Date
 }

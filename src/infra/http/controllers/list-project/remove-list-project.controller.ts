@@ -11,6 +11,7 @@ import { Roles } from '@/infra/auth/roles.decorator'
 import { ProjectNotFoundError } from '@/domain/project/application/use-cases/errors/project-not-found-error'
 import { ProjectAlreadyCanceledError } from '@/domain/project/application/use-cases/errors/project-already-canceled-error'
 import { RemoveListProjectUseCase } from '@/domain/project/application/use-cases/remove-list-project'
+import { ListProjectCannotBeDeletedError } from '@/domain/project/application/use-cases/errors/list-project-cannot-be-deleted'
 
 @ApiTags('list-project')
 @Controller('/list-project/:id')
@@ -35,6 +36,8 @@ export class RemoveListProjectController {
         case ProjectNotFoundError:
           throw new ConflictException(error.message)
         case ProjectAlreadyCanceledError:
+          throw new ConflictException(error.message)
+        case ListProjectCannotBeDeletedError:
           throw new ConflictException(error.message)
         default:
           throw new BadRequestException(error.message)

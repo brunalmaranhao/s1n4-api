@@ -50,6 +50,9 @@ export class FetchListProjectByUserController {
             status: itemProject.status,
             deadline: itemProject.deadline,
             customer: itemProject.customer,
+            tags: itemProject.tags,
+            listProjects: itemProject.listProjects,
+            budget: itemProject.budget,
             customerId: itemProject.customerId.toString(),
             ...(itemProject.shouldShowInformationsToCustomerUser && {
               updatedListProjectAt: itemProject.updatedListProjectAt,

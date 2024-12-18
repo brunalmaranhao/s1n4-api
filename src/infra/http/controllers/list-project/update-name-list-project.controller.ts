@@ -13,10 +13,13 @@ import { z } from 'zod'
 import { UpdateListProjectUseCase } from '@/domain/project/application/use-cases/update-list-project-name'
 import { UpdateListProjectDto } from './dto/update-list-project-dto'
 import { ListProjectNotFoundError } from '@/domain/project/application/use-cases/errors/list-project-not-found-error'
+import { ListProjectCannotBeEditedError } from '@/domain/project/application/use-cases/errors/list-project-cannot-be-edited'
 
 const updateListProjectBodySchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().refine((name) => name !== 'Finalizados', {
+    message: "O nome da lista não pode ser 'Finalizados'.",
+  }),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(updateListProjectBodySchema)
@@ -44,6 +47,8 @@ export class UpdateListProjectController {
 
       switch (error.constructor) {
         case ListProjectNotFoundError:
+          throw new ConflictException(error.message)
+        case ListProjectCannotBeEditedError:
           throw new ConflictException(error.message)
         default:
           throw new BadRequestException(error.message)

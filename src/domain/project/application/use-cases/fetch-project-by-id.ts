@@ -1,6 +1,5 @@
 import { Either, left, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
-import { ResponsiblePartiesNotFoundError } from './errors/responsible-not-found-error'
 import { ProjectNotFoundError } from './errors/project-not-found-error'
 import { Project } from '../../enterprise/entities/project'
 import { ProjectRepository } from '../repositories/project-repository'
