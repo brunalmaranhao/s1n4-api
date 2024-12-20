@@ -24,9 +24,14 @@ export interface ProjectProps {
   updatedListProjectAt?: Date | null
   shouldShowInformationsToCustomerUser: boolean
   finishedAt?: Date | null
+  description?: string | null
 }
 
 export class Project extends Entity<ProjectProps> {
+  get description() {
+    return this.props.description
+  }
+
   get tags() {
     return this.props.tags
   }

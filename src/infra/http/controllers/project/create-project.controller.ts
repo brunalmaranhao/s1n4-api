@@ -20,6 +20,7 @@ const createProjectBodySchema = z.object({
   customerId: z.string(),
   budget: z.number(),
   listProjectsId: z.string(),
+  description: z.string(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createProjectBodySchema)
@@ -37,7 +38,8 @@ export class CreateProjectController {
     'INTERNAL_FINANCIAL_LEGAL',
   ])
   async handle(@Body(bodyValidationPipe) body: CreateProjectDto) {
-    const { name, customerId, deadline, budget, listProjectsId } = body
+    const { name, customerId, deadline, budget, listProjectsId, description } =
+      body
 
     const deadlineDate = deadline ? new Date(deadline) : null
 
@@ -47,6 +49,7 @@ export class CreateProjectController {
       deadline: deadlineDate,
       budget,
       listProjectsId,
+      description,
     })
 
     if (result.isLeft()) {

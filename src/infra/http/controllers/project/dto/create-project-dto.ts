@@ -15,4 +15,7 @@ export class CreateProjectDto {
 
   @ApiProperty()
   listProjectsId!: string
+
+  @ApiProperty()
+  description!: string
 }

@@ -11,6 +11,7 @@ interface CreateProjectUseCaseRequest {
   deadline: Date | null
   budget: number
   listProjectsId: string
+  description: string
 }
 
 type CreateProjectUseCaseResponse = Either<
@@ -30,6 +31,7 @@ export class CreateProjectUseCase {
     deadline,
     budget,
     listProjectsId,
+    description,
   }: CreateProjectUseCaseRequest): Promise<CreateProjectUseCaseResponse> {
     const projectAlreadyExists =
       await this.projectRepository.findByNameAndCustomer(name, customerId)
@@ -45,6 +47,7 @@ export class CreateProjectUseCase {
       budget,
       listProjectsId: new UniqueEntityID(listProjectsId),
       updatedListProjectAt: new Date(),
+      description,
     })
 
     const project = await this.projectRepository.create(newProject)
