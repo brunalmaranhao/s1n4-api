@@ -49,6 +49,7 @@ export class FetchListProjectByUserController {
             name: itemProject.name,
             status: itemProject.status,
             deadline: itemProject.deadline,
+            description: itemProject.description,
             customer: itemProject.customer,
             tags: itemProject.tags,
             listProjects: itemProject.listProjects,

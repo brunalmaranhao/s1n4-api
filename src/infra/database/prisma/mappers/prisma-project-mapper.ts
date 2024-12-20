@@ -15,6 +15,7 @@ export class PrismaProjectMapper {
         status: raw.status,
         customerId: new UniqueEntityID(raw.customerId),
         createdAt: raw.createdAt,
+        description: raw.description,
         updatedAt: raw.updatedAt,
         customer: raw.customer,
         budget: raw.budget,
@@ -34,6 +35,7 @@ export class PrismaProjectMapper {
       {
         name: raw.name,
         deadline: raw.deadline,
+        description: raw.description,
         status: raw.status,
         customerId: new UniqueEntityID(raw.customerId),
         createdAt: raw.createdAt,
@@ -54,6 +56,7 @@ export class PrismaProjectMapper {
       id: project.id.toString(),
       name: project.name,
       deadline: project.deadline,
+      description: project.description,
       status: project.status,
       customerId: project.customerId.toString(),
       createdAt: project.createdAt,

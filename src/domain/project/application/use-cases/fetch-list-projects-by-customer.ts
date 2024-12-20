@@ -25,6 +25,10 @@ export class FetchListProjectsByCustomerUseCase {
     const listProjects =
       await this.listProjectRepository.findByCustomerId(customerId)
 
+    for (const x of listProjects) {
+      console.log(x.projects)
+    }
+
     return right({
       listProjects,
     })

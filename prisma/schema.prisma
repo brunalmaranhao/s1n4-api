@@ -155,6 +155,7 @@ model Project {
   shouldShowInformationsToCustomerUser Boolean           @default(true)
   finishedAt                           DateTime?
   tags                                 Tag[]
+  description                          String?
 
   @@map("projects")
 }
