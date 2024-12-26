@@ -63,4 +63,12 @@ export class InMemoryProjectUpdateRepository
     const projects = this.items.filter((item) => item.status === status)
     return projects
   }
+
+  async fetchByProjectId(projectId: string): Promise<ProjectUpdate[]> {
+    const projects = this.items.filter(
+      (item) =>
+        item.projectId.toString() === projectId && item.status === 'ACTIVE',
+    )
+    return projects
+  }
 }

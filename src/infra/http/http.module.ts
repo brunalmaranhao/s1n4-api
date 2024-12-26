@@ -161,6 +161,14 @@ import { RemoveTagFromProjectController } from './controllers/project/remove-tag
 import { RemoveTagFromProjectUseCase } from '@/domain/project/application/use-cases/remove-tag-project'
 import { SearchTagByCustomerController } from './controllers/tags/search-tag.controller'
 import { SearchTagByNameAndCustomerUseCase } from '@/domain/project/application/use-cases/search-tag-by-name-and-customer'
+import { CreateCommentController } from './controllers/comment/create-comment.controller'
+import { CreateCommentUseCase } from '@/domain/project/application/use-cases/create-comment'
+import { RemoveCommentUseCase } from '@/domain/project/application/use-cases/remove-comment'
+import { RemoveCommentController } from './controllers/comment/remove-comment.controller'
+import { UpdateCommentController } from './controllers/comment/update-comment.controller'
+import { UpdateCommentUseCase } from '@/domain/project/application/use-cases/update-comment'
+import { FetchProjectUpdateByProjectUseCase } from '@/domain/project/application/use-cases/fetch-project-updates-by-project'
+import { FetchActivesProjectUpdatesByProjectController } from './controllers/project-updates/fetch-actives-project-updates-by-project.controller'
 
 @Module({
   imports: [
@@ -253,6 +261,10 @@ import { SearchTagByNameAndCustomerUseCase } from '@/domain/project/application/
     AddTagToProjectController,
     RemoveTagFromProjectController,
     SearchTagByCustomerController,
+    CreateCommentController,
+    RemoveCommentController,
+    UpdateCommentController,
+    FetchActivesProjectUpdatesByProjectController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -324,6 +336,7 @@ import { SearchTagByNameAndCustomerUseCase } from '@/domain/project/application/
     UpdateBudgetExpenseUseCase,
     RemoveBudgetExpenseUseCase,
     FetchProjectByStatusAndCustomerUseCase,
+    FetchProjectUpdateByProjectUseCase,
     CreateTagUseCase,
     UpdateTagUseCase,
     RemoveTagUseCase,
@@ -332,6 +345,9 @@ import { SearchTagByNameAndCustomerUseCase } from '@/domain/project/application/
     FetchTagByIdUseCase,
     RemoveTagFromProjectUseCase,
     SearchTagByNameAndCustomerUseCase,
+    CreateCommentUseCase,
+    RemoveCommentUseCase,
+    UpdateCommentUseCase,
   ],
 })
 export class HttpModule {}
