@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 import { ProjectUpdateRepository } from '../repositories/project-update-repository'
 import { ProjectUpdatesNotFoundError } from './errors/project-updates-not-found-error'
+import { CommentRepository } from '../repositories/comment-repository'
 
 interface RemoveProjectUpdatesUseCaseRequest {
   id: string
@@ -14,7 +15,10 @@ type RemoveProjectUpdatesUseCaseResponse = Either<
 
 @Injectable()
 export class RemoveProjectUpdatesUseCase {
-  constructor(private projectUpdateRepository: ProjectUpdateRepository) {}
+  constructor(
+    private projectUpdateRepository: ProjectUpdateRepository,
+    private commentRepository: CommentRepository,
+  ) {}
 
   async execute({
     id,
@@ -26,6 +30,10 @@ export class RemoveProjectUpdatesUseCase {
     }
 
     await this.projectUpdateRepository.remove(id)
+
+    project.comments?.map(async (comment) => {
+      await this.commentRepository.remove(comment.id)
+    })
 
     return right(null)
   }

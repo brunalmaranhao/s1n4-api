@@ -26,6 +26,7 @@ model User {
   projectUpdates     ProjectUpdates[]
   notifications      Notification[]
   verificationTokens VerificationToken[]
+  comments           Comments[]
 
   @@map("users")
 }
@@ -184,8 +185,24 @@ model ProjectUpdates {
   updatedAt     DateTime?
   status        Status
   notifications Notification[]
+  comments      Comments[]
 
   @@map("project_updates")
+}
+
+model Comments {
+  id              String    @id @default(uuid())
+  content         String
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+  authorId        String    @map("author_id")
+  projectUpdateId String    @map("project_update_id")
+  status          Status
+
+  author        User           @relation(fields: [authorId], references: [id])
+  projectUpdate ProjectUpdates @relation(fields: [projectUpdateId], references: [id])
+
+  @@map("comments")
 }
 
 model Notification {

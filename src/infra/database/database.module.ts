@@ -28,6 +28,8 @@ import { ListProjectRepository } from '@/domain/project/application/repositories
 import { PrismaListProjectRepository } from './prisma/repositories/prisma-list-projects-repository'
 import { TagRepository } from '@/domain/project/application/repositories/tag-repository'
 import { PrismaTagRepository } from './prisma/repositories/prisma-tag-repository'
+import { CommentRepository } from '@/domain/project/application/repositories/comment-repository'
+import { PrismaCommentRepository } from './prisma/repositories/prisma-comment-repository'
 
 @Module({
   providers: [
@@ -94,6 +96,10 @@ import { PrismaTagRepository } from './prisma/repositories/prisma-tag-repository
       provide: TagRepository,
       useClass: PrismaTagRepository,
     },
+    {
+      provide: CommentRepository,
+      useClass: PrismaCommentRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -111,6 +117,7 @@ import { PrismaTagRepository } from './prisma/repositories/prisma-tag-repository
     PeriodicReportRepository,
     ListProjectRepository,
     TagRepository,
+    CommentRepository,
   ],
 })
 export class DatabaseModule {}
