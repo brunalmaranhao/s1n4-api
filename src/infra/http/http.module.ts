@@ -169,6 +169,14 @@ import { UpdateCommentController } from './controllers/comment/update-comment.co
 import { UpdateCommentUseCase } from '@/domain/project/application/use-cases/update-comment'
 import { FetchProjectUpdateByProjectUseCase } from '@/domain/project/application/use-cases/fetch-project-updates-by-project'
 import { FetchActivesProjectUpdatesByProjectController } from './controllers/project-updates/fetch-actives-project-updates-by-project.controller'
+import { CreateReactionCommentController } from './controllers/reactions/create-reaction-comment.controller'
+import { CreateReactionCommentUseCase } from '@/domain/project/application/use-cases/create-reaction-comment'
+import { CreateReactionProjectUpdateUseCase } from '@/domain/project/application/use-cases/create-reaction-project-update'
+import { CreateReactionProjectUpdateController } from './controllers/reactions/create-reaction-project-update.controller'
+import { RemoveReactionCommentController } from './controllers/reactions/remove-reaction-comment.controller'
+import { RemoveReactionCommentUseCase } from '@/domain/project/application/use-cases/remove-reaction-comment'
+import { RemoveReactionProjectUpdateController } from './controllers/reactions/remove-reaction-project-update.controller'
+import { RemoveReactionProjectUpdateUseCase } from '@/domain/project/application/use-cases/remove-reaction-project-update'
 
 @Module({
   imports: [
@@ -265,6 +273,10 @@ import { FetchActivesProjectUpdatesByProjectController } from './controllers/pro
     RemoveCommentController,
     UpdateCommentController,
     FetchActivesProjectUpdatesByProjectController,
+    CreateReactionCommentController,
+    CreateReactionProjectUpdateController,
+    RemoveReactionCommentController,
+    RemoveReactionProjectUpdateController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -348,6 +360,10 @@ import { FetchActivesProjectUpdatesByProjectController } from './controllers/pro
     CreateCommentUseCase,
     RemoveCommentUseCase,
     UpdateCommentUseCase,
+    CreateReactionCommentUseCase,
+    CreateReactionProjectUpdateUseCase,
+    RemoveReactionCommentUseCase,
+    RemoveReactionProjectUpdateUseCase,
   ],
 })
 export class HttpModule {}

@@ -206,12 +206,24 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
         comments: {
           include: {
             author: true,
+            reactions: {
+              include: {
+                emoji: true,
+                user: true,
+              },
+            },
           },
           where: {
             status: 'ACTIVE',
           },
           orderBy: {
             createdAt: 'asc',
+          },
+        },
+        reactions: {
+          include: {
+            emoji: true,
+            user: true,
           },
         },
         user: true,

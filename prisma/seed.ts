@@ -1,17 +1,21 @@
-import { PrismaClient } from "@prisma/client";
-import { CreateInitialDataSeeder } from "./seeders/data-seeder";
+import { PrismaClient } from '@prisma/client'
+import { CreateInitialDataSeeder } from './seeders/data-seeder'
+import { EmojisSeeder } from './seeders/emojis'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
   const { createAdminUser, newCustomers } =
-    await CreateInitialDataSeeder(prisma);
+    await CreateInitialDataSeeder(prisma)
   // newCustomers();
-  createAdminUser();
+  createAdminUser()
+
+  // const { createEmojis } = await EmojisSeeder(prisma)
+  // await createEmojis()
 }
 
 main()
   .catch((e) => console.error(e))
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

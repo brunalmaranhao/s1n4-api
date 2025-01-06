@@ -5,6 +5,7 @@ import {
   Status,
   ProjectUpdates as PrismaProjectUpdates,
   User as PrismaUser,
+  Reaction as PrismaReaction,
 } from '@prisma/client'
 import { ProjectUpdate } from './projectUpdates'
 import { User } from './user'
@@ -18,9 +19,14 @@ export interface CommentProps {
   authorId: UniqueEntityID
   projectUpdate?: ProjectUpdate | PrismaProjectUpdates | null
   user?: User | PrismaUser | null
+  reactions?: PrismaReaction[] | null
 }
 
 export class Comment extends Entity<CommentProps> {
+  get reactions() {
+    return this.props.reactions
+  }
+
   get content() {
     return this.props.content
   }

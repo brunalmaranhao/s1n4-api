@@ -7,6 +7,7 @@ import {
   Status,
   User as UserPrisma,
   Comments as PrismaComment,
+  Reaction as PrismaReaction,
 } from '@prisma/client'
 import { ProjectUpdateCreatedEvent } from '../../events/project-update-created-event'
 import { User } from './user'
@@ -30,9 +31,14 @@ export interface ProjectUpdateProps {
   project?: ProjectProps | null | Project
   user?: UserPrisma | User | null
   comments?: PrismaComment[] | null
+  reactions?: PrismaReaction[] | null
 }
 
 export class ProjectUpdate extends AggregateRoot<ProjectUpdateProps> {
+  get reactions() {
+    return this.props.reactions
+  }
+
   get user() {
     return this.props.user
   }
