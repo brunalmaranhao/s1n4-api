@@ -3,6 +3,7 @@ import {
   Prisma,
   Project,
   Comments as PrismaComment,
+  Reaction as PrismaReaction,
   User,
 } from '@prisma/client'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
@@ -15,6 +16,7 @@ type PrismaProjectUpdateProps = PrismaProjectUpdates & {
   project?: ProjectProps
   user: User
   comments?: PrismaComment[] | null
+  reactions?: PrismaReaction[] | null
 }
 export class PrismaProjectUpdateMapper {
   static toDomainWithProject(raw: PrismaProjectUpdateProps): ProjectUpdate {
@@ -28,6 +30,7 @@ export class PrismaProjectUpdateMapper {
         comments: raw.comments,
         createdAt: raw.createdAt,
         updateAt: raw.updatedAt,
+        reactions: raw.reactions,
       },
       new UniqueEntityID(raw.id),
     )

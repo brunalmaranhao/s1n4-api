@@ -27,6 +27,7 @@ model User {
   notifications      Notification[]
   verificationTokens VerificationToken[]
   comments           Comments[]
+  reactions          Reaction[]          @relation("userReactions")
 
   @@map("users")
 }
@@ -186,8 +187,37 @@ model ProjectUpdates {
   status        Status
   notifications Notification[]
   comments      Comments[]
+  reactions     Reaction[]
 
   @@map("project_updates")
+}
+
+model Reaction {
+  id              String          @id @default(uuid())
+  userId          String
+  projectUpdateId String?
+  commentId       String?
+  emojiId         String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime?       @updatedAt
+  status          Status
+  messageId       String?
+  comment         Comments?       @relation(fields: [commentId], references: [id])
+  emoji           Emoji           @relation(fields: [emojiId], references: [id])
+  post            ProjectUpdates? @relation(fields: [projectUpdateId], references: [id])
+  user            User            @relation("userReactions", fields: [userId], references: [id])
+
+  @@unique([userId, projectUpdateId])
+  @@unique([userId, commentId])
+}
+
+model Emoji {
+  id        String     @id @default(uuid())
+  unified   String     @unique
+  name      String
+  category  String
+  char      String?
+  reactions Reaction[]
 }
 
 model Comments {
@@ -201,6 +231,7 @@ model Comments {
 
   author        User           @relation(fields: [authorId], references: [id])
   projectUpdate ProjectUpdates @relation(fields: [projectUpdateId], references: [id])
+  reactions     Reaction[]
 
   @@map("comments")
 }

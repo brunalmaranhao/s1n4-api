@@ -8,12 +8,14 @@ import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { CommentFactory } from 'test/factories/make-comment'
 import { CustomerFactory } from 'test/factories/make-customer'
+import { EmojiFactory } from 'test/factories/make-emoji'
 import { ListProjectFactory } from 'test/factories/make-list-project-repository'
 import { ProjectFactory } from 'test/factories/make-project'
 import { ProjectUpdatesFactory } from 'test/factories/make-project-updates'
+import { ReactionFactory } from 'test/factories/make-reaction'
 import { UserFactory } from 'test/factories/make-user'
 
-describe('Update Comment (E2E)', () => {
+describe('Remove Reaction Project Update (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -23,6 +25,8 @@ describe('Update Comment (E2E)', () => {
   let customerFactory: CustomerFactory
   let listProjectFactory: ListProjectFactory
   let commentFactory: CommentFactory
+  let emojiFactory: EmojiFactory
+  let reactionFactory: ReactionFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -34,6 +38,8 @@ describe('Update Comment (E2E)', () => {
         CustomerFactory,
         ListProjectFactory,
         CommentFactory,
+        EmojiFactory,
+        ReactionFactory,
       ],
     }).compile()
 
@@ -46,22 +52,20 @@ describe('Update Comment (E2E)', () => {
     customerFactory = moduleRef.get(CustomerFactory)
     listProjectFactory = moduleRef.get(ListProjectFactory)
     commentFactory = moduleRef.get(CommentFactory)
+    emojiFactory = moduleRef.get(EmojiFactory)
+    reactionFactory = moduleRef.get(ReactionFactory)
 
     await app.init()
   })
 
-  test('[UPDATE] /comment/:id', async () => {
-    const customer = await customerFactory.makePrismaCustomer()
-
-    const user = await userFactory.makePrismaUser()
-
-    const user2 = await userFactory.makePrismaUser({
-      role: 'CLIENT_OWNER',
-      customerId: customer.id,
+  test('[DELETE] /reaction/project-update/:id', async () => {
+    const customer = await customerFactory.makePrismaCustomer({
+      cnpj: '123',
     })
 
+    const user = await userFactory.makePrismaUser()
     const accessToken = jwt.sign({
-      sub: user2.id.toString(),
+      sub: user.id.toString(),
       role: 'INTERNAL_MANAGEMENT',
     })
 
@@ -81,24 +85,33 @@ describe('Update Comment (E2E)', () => {
 
     const comment = await commentFactory.makePrismaComment({
       projectUpdateId: projectUpdate.id,
-      authorId: user2.id,
+      authorId: user.id,
+    })
+    const emoji = await emojiFactory.makePrismaEmoji({
+      unified: '223344',
+    })
+
+    await reactionFactory.makePrismaReaction({
+      projectUpdateId: projectUpdate.id,
+      emojiId: emoji.id,
+      userId: user.id,
     })
 
     const response = await request(app.getHttpServer())
-      .put(`/comment/update/${comment.id.toString()}`)
+      .delete(`/reaction/project-update/${projectUpdate.id.toString()}`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        content: 'Comentário editado',
+      .send()
+
+    expect(response.statusCode).toBe(204)
+
+    const canceledReactionProjectUpdateOnDatabase =
+      await prisma.reaction.findFirst({
+        where: {
+          projectUpdateId: projectUpdate.id.toString(),
+          userId: user.id.toString(),
+        },
       })
 
-    expect(response.statusCode).toBe(201)
-
-    const updatedProjectOnDatabase = await prisma.comments.findFirst({
-      where: {
-        content: 'Comentário editado',
-      },
-    })
-
-    expect(updatedProjectOnDatabase).toBeTruthy()
+    expect(canceledReactionProjectUpdateOnDatabase).toBeNull()
   })
 })

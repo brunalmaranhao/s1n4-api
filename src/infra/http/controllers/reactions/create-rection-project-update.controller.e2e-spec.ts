@@ -8,12 +8,13 @@ import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { CommentFactory } from 'test/factories/make-comment'
 import { CustomerFactory } from 'test/factories/make-customer'
+import { EmojiFactory } from 'test/factories/make-emoji'
 import { ListProjectFactory } from 'test/factories/make-list-project-repository'
 import { ProjectFactory } from 'test/factories/make-project'
 import { ProjectUpdatesFactory } from 'test/factories/make-project-updates'
 import { UserFactory } from 'test/factories/make-user'
 
-describe('Update Comment (E2E)', () => {
+describe('Create Reaction Project Update (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -23,6 +24,7 @@ describe('Update Comment (E2E)', () => {
   let customerFactory: CustomerFactory
   let listProjectFactory: ListProjectFactory
   let commentFactory: CommentFactory
+  let emojiFactory: EmojiFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -34,6 +36,7 @@ describe('Update Comment (E2E)', () => {
         CustomerFactory,
         ListProjectFactory,
         CommentFactory,
+        EmojiFactory,
       ],
     }).compile()
 
@@ -46,11 +49,12 @@ describe('Update Comment (E2E)', () => {
     customerFactory = moduleRef.get(CustomerFactory)
     listProjectFactory = moduleRef.get(ListProjectFactory)
     commentFactory = moduleRef.get(CommentFactory)
+    emojiFactory = moduleRef.get(EmojiFactory)
 
     await app.init()
   })
 
-  test('[UPDATE] /comment/:id', async () => {
+  test('[POST] /reaction/project-update', async () => {
     const customer = await customerFactory.makePrismaCustomer()
 
     const user = await userFactory.makePrismaUser()
@@ -84,21 +88,27 @@ describe('Update Comment (E2E)', () => {
       authorId: user2.id,
     })
 
+    const emoji = await emojiFactory.makePrismaEmoji({
+      unified: '223344',
+    })
+
     const response = await request(app.getHttpServer())
-      .put(`/comment/update/${comment.id.toString()}`)
+      .post(`/reaction/project-update`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        content: 'Comentário editado',
+        projectUpdateId: projectUpdate.id.toString(),
+        unified: emoji.unified,
       })
 
     expect(response.statusCode).toBe(201)
 
-    const updatedProjectOnDatabase = await prisma.comments.findFirst({
+    const reactionOnDatabase = await prisma.reaction.findFirst({
       where: {
-        content: 'Comentário editado',
+        projectUpdateId: projectUpdate.id.toString(),
+        userId: user2.id.toString(),
       },
     })
 
-    expect(updatedProjectOnDatabase).toBeTruthy()
+    expect(reactionOnDatabase).toBeTruthy()
   })
 })

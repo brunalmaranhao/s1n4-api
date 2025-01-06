@@ -30,6 +30,10 @@ import { TagRepository } from '@/domain/project/application/repositories/tag-rep
 import { PrismaTagRepository } from './prisma/repositories/prisma-tag-repository'
 import { CommentRepository } from '@/domain/project/application/repositories/comment-repository'
 import { PrismaCommentRepository } from './prisma/repositories/prisma-comment-repository'
+import { ReactionRepository } from '@/domain/project/application/repositories/reaction-repository'
+import { PrismaReactionRepository } from './prisma/repositories/prisma-reaction-repository'
+import { EmojiRepository } from '@/domain/project/application/repositories/emoji-repository'
+import { PrismaEmojiRepository } from './prisma/repositories/prisma-emoji-repository'
 
 @Module({
   providers: [
@@ -100,6 +104,14 @@ import { PrismaCommentRepository } from './prisma/repositories/prisma-comment-re
       provide: CommentRepository,
       useClass: PrismaCommentRepository,
     },
+    {
+      provide: ReactionRepository,
+      useClass: PrismaReactionRepository,
+    },
+    {
+      provide: EmojiRepository,
+      useClass: PrismaEmojiRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -118,6 +130,8 @@ import { PrismaCommentRepository } from './prisma/repositories/prisma-comment-re
     ListProjectRepository,
     TagRepository,
     CommentRepository,
+    EmojiRepository,
+    ReactionRepository,
   ],
 })
 export class DatabaseModule {}
