@@ -10,8 +10,8 @@ async function main() {
   // newCustomers();
   createAdminUser()
 
-  // const { createEmojis } = await EmojisSeeder(prisma)
-  // await createEmojis()
+  const { createEmojis } = await EmojisSeeder(prisma)
+  await createEmojis()
 }
 
 main()
