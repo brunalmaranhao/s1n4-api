@@ -200,6 +200,7 @@ export class PrismaCustomersRepository implements CustomerRepository {
         include: {
           address: true,
           projects: true,
+          users: true,
         },
       }),
       this.prisma.customer.count({
