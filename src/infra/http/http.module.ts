@@ -177,6 +177,10 @@ import { RemoveReactionCommentController } from './controllers/reactions/remove-
 import { RemoveReactionCommentUseCase } from '@/domain/project/application/use-cases/remove-reaction-comment'
 import { RemoveReactionProjectUpdateController } from './controllers/reactions/remove-reaction-project-update.controller'
 import { RemoveReactionProjectUpdateUseCase } from '@/domain/project/application/use-cases/remove-reaction-project-update'
+import { UpdateProjectNameController } from './controllers/project/update-project-name.controller'
+import { UpdateProjectNameUseCase } from '@/domain/project/application/use-cases/update-project-name'
+import { FetchListProjectsByCustomerAndDateUseCase } from '@/domain/project/application/use-cases/fetch-list-projects-by-customer-and-date'
+import { FetchListProjectsByCustomerAndDateController } from './controllers/list-project/fetch-list-project-by-customer-and-date.controller'
 
 @Module({
   imports: [
@@ -277,6 +281,8 @@ import { RemoveReactionProjectUpdateUseCase } from '@/domain/project/application
     CreateReactionProjectUpdateController,
     RemoveReactionCommentController,
     RemoveReactionProjectUpdateController,
+    UpdateProjectNameController,
+    FetchListProjectsByCustomerAndDateController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -364,6 +370,8 @@ import { RemoveReactionProjectUpdateUseCase } from '@/domain/project/application
     CreateReactionProjectUpdateUseCase,
     RemoveReactionCommentUseCase,
     RemoveReactionProjectUpdateUseCase,
+    UpdateProjectNameUseCase,
+    FetchListProjectsByCustomerAndDateUseCase,
   ],
 })
 export class HttpModule {}

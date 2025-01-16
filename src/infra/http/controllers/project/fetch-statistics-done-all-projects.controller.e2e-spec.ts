@@ -108,14 +108,14 @@ describe('Fetch Statistics Done Projects  (E2E)', () => {
     ])
 
     const response = await request(app.getHttpServer())
-      .get(`/projects/statistics-done`)
+      .get(`/projects/statistics`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     // console.log(response.body.projects)
 
     expect(response.statusCode).toBe(200)
-    expect(response.body.projects).toHaveLength(2)
+    expect(response.body.projectsDone).toHaveLength(2)
     expect(response.body.total).toEqual(8)
   })
 })

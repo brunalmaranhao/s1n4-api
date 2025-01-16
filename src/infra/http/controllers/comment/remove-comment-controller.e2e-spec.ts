@@ -75,6 +75,7 @@ describe('Remove Comment (E2E)', () => {
 
     const comment = await commentFactory.makePrismaComment({
       projectUpdateId: projectUpdate.id,
+      authorId: user.id,
     })
 
     const response = await request(app.getHttpServer())

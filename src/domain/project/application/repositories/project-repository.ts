@@ -20,6 +20,7 @@ export abstract class ProjectRepository {
   }>
 
   abstract update(id: string, project: EditProjectProps): Promise<Project>
+  abstract updateName(id: string, name: string): Promise<Project>
   abstract remove(id: string): Promise<void>
   abstract fetchByStatus(
     status: Status,
@@ -51,4 +52,9 @@ export abstract class ProjectRepository {
 
   abstract addTagToProject(projectId: string, tag: Tag): Promise<void>
   abstract removeTagFromProject(projectId: string, tagId: string): Promise<void>
+  abstract getProjectsByDateRange(
+    startDate: Date,
+    endDate: Date,
+    customerId: string,
+  ): Promise<Project[]>
 }

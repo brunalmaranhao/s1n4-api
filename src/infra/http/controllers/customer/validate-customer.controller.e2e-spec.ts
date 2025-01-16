@@ -34,7 +34,9 @@ describe('Validate Customer (E2E)', () => {
       role: 'INTERNAL_MANAGEMENT',
     })
 
-    const customer = await customerFactory.makePrismaCustomer()
+    const customer = await customerFactory.makePrismaCustomer({
+      cnpj: '73.236.044/0001-99',
+    })
 
     const response = await request(app.getHttpServer())
       .post('/validate-customer')
@@ -44,7 +46,7 @@ describe('Validate Customer (E2E)', () => {
         corporateName: customer.corporateName,
         cnpj: customer.cnpj,
       })
-
+    console.log(response)
     expect(response.statusCode).toBe(409)
   })
 })
