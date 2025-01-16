@@ -8,7 +8,8 @@ import { ProjectRepository } from '../repositories/project-repository'
 interface CreateProjectUseCaseRequest {
   name: string
   customerId: string
-  deadline: Date | null
+  start: Date
+  deadline: Date
   budget: number
   listProjectsId: string
   description: string
@@ -28,6 +29,7 @@ export class CreateProjectUseCase {
   async execute({
     name,
     customerId,
+    start,
     deadline,
     budget,
     listProjectsId,
@@ -43,6 +45,7 @@ export class CreateProjectUseCase {
     const newProject = Project.create({
       name,
       customerId: new UniqueEntityID(customerId),
+      start,
       deadline,
       budget,
       listProjectsId: new UniqueEntityID(listProjectsId),

@@ -1,52 +1,48 @@
-import { CustomerFactory } from 'test/factories/make-customer'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
-import request from 'supertest'
 import { UserFactory } from 'test/factories/make-user'
-import { ListProjectFactory } from 'test/factories/make-list-project-repository'
+import request from 'supertest'
+import { ResponsiblePartiesFactory } from 'test/factories/make-responsible-parties'
+import { CustomerFactory } from 'test/factories/make-customer'
 import { ProjectFactory } from 'test/factories/make-project'
-import { TagFactory } from 'test/factories/make-tag'
+import { ListProjectFactory } from 'test/factories/make-list-project-repository'
 
-describe('Add Tag to Project (E2E)', () => {
+describe('Fetch List Project by Id  (E2E)', () => {
   let app: INestApplication
-  let prisma: PrismaService
-  let jwt: JwtService
   let userFactory: UserFactory
+  let projectFactory: ProjectFactory
   let customerFactory: CustomerFactory
   let listProjectFactory: ListProjectFactory
-  let projectFactory: ProjectFactory
-  let tagFactory: TagFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
       providers: [
         UserFactory,
+        ResponsiblePartiesFactory,
         CustomerFactory,
-        ListProjectFactory,
         ProjectFactory,
-        TagFactory,
+        ListProjectFactory,
       ],
     }).compile()
 
     app = moduleRef.createNestApplication()
-    prisma = moduleRef.get(PrismaService)
     userFactory = moduleRef.get(UserFactory)
-    customerFactory = moduleRef.get(CustomerFactory)
-    listProjectFactory = moduleRef.get(ListProjectFactory)
-    projectFactory = moduleRef.get(ProjectFactory)
-    tagFactory = moduleRef.get(TagFactory)
     jwt = moduleRef.get(JwtService)
+    customerFactory = moduleRef.get(CustomerFactory)
+    projectFactory = moduleRef.get(ProjectFactory)
+    listProjectFactory = moduleRef.get(ListProjectFactory)
 
     await app.init()
   })
 
-  test('[POST] /project/tag/:tagId/add', async () => {
+  test('[GET] /list-project/customer/:customerId', async () => {
     const user = await userFactory.makePrismaUser()
+
     const accessToken = jwt.sign({
       sub: user.id.toString(),
       role: 'INTERNAL_MANAGEMENT',
@@ -57,45 +53,31 @@ describe('Add Tag to Project (E2E)', () => {
     const listProject = await listProjectFactory.makePrismaListProject({
       customerId: customer.id,
     })
-    const project = await projectFactory.makePrismaProject({
+
+    await projectFactory.makePrismaProject({
       customerId: customer.id,
       listProjectsId: listProject.id,
+      start: new Date('2025-03-02'),
+      deadline: new Date('2025-03-03'),
     })
-
-    const tag = await tagFactory.makePrismaTag({
+    await projectFactory.makePrismaProject({
       customerId: customer.id,
+      listProjectsId: listProject.id,
+      start: new Date('2025-11-11'),
+      deadline: new Date('2025-12-12'),
     })
-
+    // /list-project/customer/:customerId/startDate/:startDate/endDate/:endDate
     const response = await request(app.getHttpServer())
-      .post(`/project/tag/add`)
+      .get(
+        `/list-project/customer/${customer.id.toString()}/startDate/2025-02-02/endDate/2025-03-03`,
+      )
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        tagId: tag.id.toString(),
-        projectId: project.id.toString(),
-      })
+      .send()
 
-    expect(response.statusCode).toBe(201)
+    expect(response.statusCode).toBe(200)
 
-    const projectOnDatabase = await prisma.project.findFirst({
-      where: {
-        customerId: customer.id.toString(),
-      },
-      include: {
-        tags: true,
-      },
-    })
+    expect(response.body.listProjects).toHaveLength(1)
 
-    console.log(projectOnDatabase)
-
-    expect(projectOnDatabase).toMatchObject({
-      tags: expect.arrayContaining([
-        expect.objectContaining({
-          customerId: customer.id.toString(),
-          name: tag.name,
-        }),
-      ]),
-    })
-
-    expect(projectOnDatabase).toBeTruthy()
+    expect(response.body.listProjects[0].projects).toHaveLength(1)
   })
 })

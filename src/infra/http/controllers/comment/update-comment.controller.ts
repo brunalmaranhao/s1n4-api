@@ -29,7 +29,7 @@ const bodyValidationPipe = new ZodValidationPipe(updateCommentBodySchema)
 export class UpdateCommentController {
   constructor(private updateCommentUseCase: UpdateCommentUseCase) {}
 
-  @Patch()
+  @Put()
   @HttpCode(204)
   async handle(
     @Body(bodyValidationPipe) body: UpdateCommentDto,

@@ -55,11 +55,11 @@ describe('Remove Project (E2E)', () => {
 
     const canceledProjectOnDatabase = await prisma.project.findFirst({
       where: {
-        statusProject: 'CANCELED',
+        status: 'INACTIVE',
       },
     })
 
     expect(canceledProjectOnDatabase).toBeTruthy()
-    expect(canceledProjectOnDatabase?.statusProject).toBe('CANCELED')
+    expect(canceledProjectOnDatabase?.status).toBe('INACTIVE')
   })
 })

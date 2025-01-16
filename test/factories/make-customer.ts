@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-
+import { randomUUID } from 'node:crypto'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
@@ -15,9 +15,9 @@ export function makeCustomer(
 ) {
   const customer = Customer.create(
     {
-      name: faker.company.name(),
-      corporateName: faker.company.buzzVerb(),
-      cnpj: '33.813.838/0001-53',
+      name: randomUUID(),
+      corporateName: randomUUID(),
+      cnpj: randomUUID(),
       ...override,
     },
     id,

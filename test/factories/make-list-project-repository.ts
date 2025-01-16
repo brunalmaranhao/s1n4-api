@@ -20,6 +20,7 @@ export function makeListProject(
       customerId: new UniqueEntityID('f6c85da2-fb10-48e9-866d-742db03abe82'),
       createdAt: new Date(),
       ...override,
+      order: 0,
     },
     id,
   )

@@ -11,6 +11,18 @@ import { Tag } from '@/domain/project/enterprise/entities/tags'
 @Injectable()
 export class PrismaProjectRepository implements ProjectRepository {
   constructor(private prisma: PrismaService) {}
+  async updateName(id: string, name: string): Promise<Project> {
+    const project = await this.prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    })
+
+    return PrismaProjectMapper.toDomain(project)
+  }
 
   async fetchCustomerProjects(customerId: string): Promise<Project[]> {
     const projects = await this.prisma.project.findMany({
@@ -169,7 +181,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       }),
       this.prisma.project.count(),
     ])
-    console.log(projects)
+    // console.log(projects)
     return {
       projects: projects.map(PrismaProjectMapper.toDomainWithCustomer),
       total,
@@ -237,12 +249,38 @@ export class PrismaProjectRepository implements ProjectRepository {
     return PrismaProjectMapper.toDomain(newProject)
   }
 
+  async getProjectsByDateRange(
+    startDate: Date,
+    endDate: Date,
+    customerId: string,
+  ): Promise<Project[]> {
+    const projects = await this.prisma.project.findMany({
+      where: {
+        customerId,
+        AND: [
+          {
+            start: { lte: endDate },
+          },
+          {
+            deadline: { gte: startDate },
+          },
+        ],
+      },
+      include: {
+        customer: true,
+        tags: true,
+      },
+    })
+
+    return projects.map(PrismaProjectMapper.toDomainWithCustomer)
+  }
+
   async addProjectList(
     projectId: string,
     listProjectId: string,
     shouldSaveUpdateDate: boolean,
   ): Promise<void> {
-    console.log(shouldSaveUpdateDate)
+    // console.log(shouldSaveUpdateDate)
     const updateData: Record<string, any> = {
       listProjectsId: listProjectId,
     }

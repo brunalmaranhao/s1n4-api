@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { CustomerFactory } from 'test/factories/make-customer'
+import { ListProjectFactory } from 'test/factories/make-list-project-repository'
 import { ProjectFactory } from 'test/factories/make-project'
 import { ProjectUpdatesFactory } from 'test/factories/make-project-updates'
 import { UserFactory } from 'test/factories/make-user'
@@ -18,6 +19,7 @@ describe('Remove Project Updates(E2E)', () => {
   let projectUpdateFactory: ProjectUpdatesFactory
   let customerFactory: CustomerFactory
   let projectFactory: ProjectFactory
+  let listProjectFactory: ListProjectFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -27,6 +29,7 @@ describe('Remove Project Updates(E2E)', () => {
         ProjectUpdatesFactory,
         CustomerFactory,
         ProjectFactory,
+        ListProjectFactory,
       ],
     }).compile()
 
@@ -37,6 +40,7 @@ describe('Remove Project Updates(E2E)', () => {
     jwt = moduleRef.get(JwtService)
     projectFactory = moduleRef.get(ProjectFactory)
     customerFactory = moduleRef.get(CustomerFactory)
+    listProjectFactory = moduleRef.get(ListProjectFactory)
 
     await app.init()
   })
@@ -50,8 +54,13 @@ describe('Remove Project Updates(E2E)', () => {
 
     const customer = await customerFactory.makePrismaCustomer()
 
+    const listProject = await listProjectFactory.makePrismaListProject({
+      customerId: customer.id,
+    })
+
     const project = await projectFactory.makePrismaProject({
       customerId: customer.id,
+      listProjectsId: listProject.id,
     })
 
     const projectUpdate = await projectUpdateFactory.makePrismaProject({
@@ -60,11 +69,8 @@ describe('Remove Project Updates(E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .delete('/project-updates')
+      .delete(`/project-updates/${projectUpdate.id.toString()}`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        id: projectUpdate.id.toString(),
-      })
 
     expect(response.statusCode).toBe(204)
 

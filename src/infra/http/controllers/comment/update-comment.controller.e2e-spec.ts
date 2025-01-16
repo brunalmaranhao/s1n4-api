@@ -91,7 +91,7 @@ describe('Update Comment (E2E)', () => {
         content: 'Comentário editado',
       })
 
-    expect(response.statusCode).toBe(201)
+    expect(response.statusCode).toBe(204)
 
     const updatedProjectOnDatabase = await prisma.comments.findFirst({
       where: {

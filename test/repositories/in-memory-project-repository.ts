@@ -23,6 +23,26 @@ export class InMemoryProjectRepository implements ProjectRepository {
     return projects
   }
 
+  async getProjectsByDateRange(
+    startDate: Date,
+    endDate: Date,
+    customerId: string,
+  ): Promise<Project[]> {
+    console.log('hey you')
+    console.log(startDate, endDate)
+    console.log(customerId)
+    const projects = this.items.filter(
+      (project) =>
+        project.customerId.toString() === customerId &&
+        project.start &&
+        project.deadline &&
+        project.start <= endDate &&
+        project.deadline >= startDate,
+    )
+
+    return projects
+  }
+
   async updateShouldShowInformationsToCustomerUser(
     id: string,
     value: boolean,
@@ -122,6 +142,21 @@ export class InMemoryProjectRepository implements ProjectRepository {
     existingProject.customerId = project.customerId
       ? new UniqueEntityID(project.customerId)
       : existingProject.customerId
+
+    return existingProject
+  }
+
+  async updateName(id: string, name: string): Promise<Project> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === id,
+    )
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    existingProject.name = name
 
     return existingProject
   }

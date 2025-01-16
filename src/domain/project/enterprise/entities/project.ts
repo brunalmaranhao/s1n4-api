@@ -3,7 +3,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import {
   Customer as PrismaCustomer,
-  Status,
   StatusProject,
   Tag as PrismaTag,
 } from '@prisma/client'
@@ -13,6 +12,7 @@ import { Tag } from './tags'
 export interface ProjectProps {
   name: string
   deadline?: Date | null
+  start?: Date | null
   status: StatusProject
   customerId: UniqueEntityID
   createdAt: Date
@@ -28,6 +28,10 @@ export interface ProjectProps {
 }
 
 export class Project extends Entity<ProjectProps> {
+  get start() {
+    return this.props.start
+  }
+
   get description() {
     return this.props.description
   }

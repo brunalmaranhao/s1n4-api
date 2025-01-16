@@ -16,6 +16,7 @@ import { CreateProjectUseCase } from '@/domain/project/application/use-cases/cre
 
 const createProjectBodySchema = z.object({
   name: z.string(),
+  start: z.coerce.date().optional(),
   deadline: z.coerce.date().optional(),
   customerId: z.string(),
   budget: z.number(),
@@ -38,15 +39,21 @@ export class CreateProjectController {
     'INTERNAL_FINANCIAL_LEGAL',
   ])
   async handle(@Body(bodyValidationPipe) body: CreateProjectDto) {
-    const { name, customerId, deadline, budget, listProjectsId, description } =
-      body
-
-    const deadlineDate = deadline ? new Date(deadline) : null
+    const {
+      name,
+      customerId,
+      deadline,
+      budget,
+      start,
+      listProjectsId,
+      description,
+    } = body
 
     const result = await this.createProjectUseCase.execute({
       name,
       customerId,
-      deadline: deadlineDate,
+      start,
+      deadline,
       budget,
       listProjectsId,
       description,
@@ -54,7 +61,7 @@ export class CreateProjectController {
 
     if (result.isLeft()) {
       const error = result.value
-
+      console.log(error)
       switch (error.constructor) {
         case ProjectAlreadyExistsError:
           throw new ConflictException(error.message)

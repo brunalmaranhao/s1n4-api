@@ -5,7 +5,10 @@ export class CreateProjectDto {
   name!: string
 
   @ApiProperty()
-  deadline?: Date | null
+  start!: Date
+
+  @ApiProperty()
+  deadline!: Date
 
   @ApiProperty()
   customerId!: string
