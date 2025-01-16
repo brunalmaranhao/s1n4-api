@@ -14,6 +14,7 @@ type PrismaCustomerProps = PrismaCustomer & {
 
 type PrismaCustomerWithProjectProps = PrismaCustomer & {
   projects: PrismaProject[]
+  users?: PrismaUser[]
 }
 
 type PrismaCustomerWithUsersProps = PrismaCustomer & {
@@ -69,6 +70,7 @@ export class PrismaCustomerMapper {
         status: raw.status,
         createdAt: raw.createdAt,
         projects: raw.projects,
+        users: raw.users,
       },
       new UniqueEntityID(raw.id),
     )

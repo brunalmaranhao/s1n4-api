@@ -81,6 +81,7 @@ export class CustomerPresenter {
       contractedServices: customer.contractedServices,
       status: customer.status,
       projects: customer.projects,
+      users: customer.users,
     }
   }
 }
