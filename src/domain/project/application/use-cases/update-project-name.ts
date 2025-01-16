@@ -1,16 +1,15 @@
 import { Either, left, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
-import { EditProjectProps } from '@/core/types/edit-project-props'
 import { ProjectNotFoundError } from './errors/project-not-found-error'
 import { Project } from '../../enterprise/entities/project'
 import { ProjectRepository } from '../repositories/project-repository'
 
-interface UpdateProjectUseCaseRequest {
+interface UpdateProjectNameUseCaseRequest {
   id: string
-  project: EditProjectProps
+  name: string
 }
 
-type UpdateProjectUseCaseResponse = Either<
+type UpdateProjectNameUseCaseResponse = Either<
   ProjectNotFoundError,
   {
     project: Project
@@ -18,20 +17,20 @@ type UpdateProjectUseCaseResponse = Either<
 >
 
 @Injectable()
-export class UpdateProjectUseCase {
+export class UpdateProjectNameUseCase {
   constructor(private projectRepository: ProjectRepository) {}
 
   async execute({
     id,
-    project,
-  }: UpdateProjectUseCaseRequest): Promise<UpdateProjectUseCaseResponse> {
+    name,
+  }: UpdateProjectNameUseCaseRequest): Promise<UpdateProjectNameUseCaseResponse> {
     const projectExists = await this.projectRepository.findById(id)
 
     if (!projectExists) {
       return left(new ProjectNotFoundError())
     }
 
-    const updatedProject = await this.projectRepository.update(id, project)
+    const updatedProject = await this.projectRepository.updateName(id, name)
 
     return right({
       project: updatedProject,

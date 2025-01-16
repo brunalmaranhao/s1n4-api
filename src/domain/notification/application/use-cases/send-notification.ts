@@ -28,6 +28,7 @@ export class SendNotificationUseCase {
     content,
     projectUpdateId,
   }: SendNotificationUseCaseRequest): Promise<SendNotificationUseCaseResponse> {
+    // console.log(projectUpdateId)
     const notification = Notification.create({
       recipientId: new UniqueEntityID(recipientId),
       title,

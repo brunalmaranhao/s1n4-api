@@ -43,6 +43,7 @@ export class ProjectUpdatesPresenter {
       date: project.createdAt,
       updateAt: project.updateAt,
       user: project.user,
+
       comments: project.comments?.map(ProjectUpdatesPresenter.toHttpComments),
       reactions: ProjectUpdatesPresenter.groupReactionsByUnified(
         project.reactions?.map(ProjectUpdatesPresenter.toHttpReactions) || [],
@@ -52,7 +53,6 @@ export class ProjectUpdatesPresenter {
 
   static toHttpComments(value: CommentProps | Comments) {
     const comment = value as CommentProps
-    console.log(comment)
     return {
       id: comment.id,
       content: comment.content,

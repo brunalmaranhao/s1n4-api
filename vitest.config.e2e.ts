@@ -9,6 +9,7 @@ export default defineConfig({
     root: './',
     setupFiles: ['./test/setup-e2e.ts'],
   },
+
   plugins: [
     tsConfigPaths(),
     swc.vite({

@@ -15,6 +15,18 @@ export class PrismaNotificationsRepository implements NotificationsRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        projectUpdates: {
+          include: {
+            project: {
+              include: {
+                tags: true,
+                listProjects: true,
+              },
+            },
+          },
+        },
+      },
     })
 
     return notifications.map(PrismaNotificationMapper.toDomain)

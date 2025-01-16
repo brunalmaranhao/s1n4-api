@@ -1,3 +1,4 @@
+import { UniqueEntityID } from './../../../../core/entities/unique-entity-id'
 import { DomainEvents } from '@/core/events/domain-events'
 import { EventHandler } from '@/core/events/event-handler'
 import { SendNotificationUseCase } from '@/domain/notification/application/use-cases/send-notification'
@@ -39,6 +40,7 @@ export class OnProjectUpdatedCreated implements EventHandler {
           recipientId: user.id,
           title: `${projectUpdateObject.user?.firstName} adicionou uma nova atualização no projeto ${projectUpdateObject.project?.name}`,
           content: projectUpdateObject.description,
+          projectUpdateId: projectUpdateObject.id.toString(),
         })
       }
 
@@ -49,6 +51,7 @@ export class OnProjectUpdatedCreated implements EventHandler {
             recipientId: user.id.toString(),
             title: `${projectUpdateObject.user?.firstName} adicionou uma nova atualização no projeto ${projectUpdateObject.project?.name}`,
             content: projectUpdate.description,
+            projectUpdateId: projectUpdateObject.id.toString(),
           })
         }
       }

@@ -140,6 +140,7 @@ model Tag {
 model Project {
   id                                   String            @id @default(uuid())
   name                                 String
+  start                                DateTime?
   deadline                             DateTime?
   status                               StatusProject
   customer                             Customer          @relation(fields: [customerId], references: [id])

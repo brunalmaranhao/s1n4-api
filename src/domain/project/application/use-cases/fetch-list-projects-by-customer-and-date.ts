@@ -4,11 +4,13 @@ import { CustomerNotFoundError } from './errors/customer-not-found'
 import { ListProjectRepository } from '../repositories/list-projects-repository'
 import { ListProjects } from '../../enterprise/entities/listProjects'
 
-interface FetchListProjectsByCustomerUseCaseRequest {
+interface FetchListProjectsByCustomerAndDateUseCaseRequest {
   customerId: string
+  startDate: Date
+  endDate: Date
 }
 
-type FetchListProjectsByCustomerUseCaseResponse = Either<
+type FetchListProjectsByCustomerAndDateUseCaseResponse = Either<
   CustomerNotFoundError,
   {
     listProjects: ListProjects[]
@@ -16,14 +18,20 @@ type FetchListProjectsByCustomerUseCaseResponse = Either<
 >
 
 @Injectable()
-export class FetchListProjectsByCustomerUseCase {
+export class FetchListProjectsByCustomerAndDateUseCase {
   constructor(private listProjectRepository: ListProjectRepository) {}
 
   async execute({
     customerId,
-  }: FetchListProjectsByCustomerUseCaseRequest): Promise<FetchListProjectsByCustomerUseCaseResponse> {
+    startDate,
+    endDate,
+  }: FetchListProjectsByCustomerAndDateUseCaseRequest): Promise<FetchListProjectsByCustomerAndDateUseCaseResponse> {
     const listProjects =
-      await this.listProjectRepository.findByCustomerId(customerId)
+      await this.listProjectRepository.findByCustomerIdAndDate(
+        customerId,
+        startDate,
+        endDate,
+      )
 
     return right({
       listProjects,

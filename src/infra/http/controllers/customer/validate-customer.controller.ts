@@ -53,7 +53,7 @@ export class ValidateCustomerController {
 
     if (result.isLeft()) {
       const error = result.value
-
+      console.log(error)
       switch (error.constructor) {
         case ExistCustomerSameCnpjError:
           throw new ConflictException({
