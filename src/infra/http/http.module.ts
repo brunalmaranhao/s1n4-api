@@ -181,6 +181,10 @@ import { UpdateProjectNameController } from './controllers/project/update-projec
 import { UpdateProjectNameUseCase } from '@/domain/project/application/use-cases/update-project-name'
 import { FetchListProjectsByCustomerAndDateUseCase } from '@/domain/project/application/use-cases/fetch-list-projects-by-customer-and-date'
 import { FetchListProjectsByCustomerAndDateController } from './controllers/list-project/fetch-list-project-by-customer-and-date.controller'
+import { FetchPeriodicReportsByCustomerController } from './controllers/periodic-reports/fetch-periodic-reports-by-customer.controller'
+import { FetchPeriodicReportsByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-customer'
+import { FetchPeriodicReportsByCustomerAndYearUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-customer-and-year'
+import { FetchPeriodicReportsByCustomerAndYearController } from './controllers/periodic-reports/fetch-periodic-reports-by-customer-and-year.controller'
 
 @Module({
   imports: [
@@ -283,6 +287,8 @@ import { FetchListProjectsByCustomerAndDateController } from './controllers/list
     RemoveReactionProjectUpdateController,
     UpdateProjectNameController,
     FetchListProjectsByCustomerAndDateController,
+    FetchPeriodicReportsByCustomerController,
+    FetchPeriodicReportsByCustomerAndYearController,
   ],
   providers: [
     AuthenticateUserUseCase,
@@ -372,6 +378,8 @@ import { FetchListProjectsByCustomerAndDateController } from './controllers/list
     RemoveReactionProjectUpdateUseCase,
     UpdateProjectNameUseCase,
     FetchListProjectsByCustomerAndDateUseCase,
+    FetchPeriodicReportsByCustomerUseCase,
+    FetchPeriodicReportsByCustomerAndYearUseCase,
   ],
 })
 export class HttpModule {}
