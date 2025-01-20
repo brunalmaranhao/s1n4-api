@@ -20,19 +20,15 @@ export class FetchPeriodicReportsByCustomerController {
     private fetchPeriodicReportsByCustomerUseCase: FetchPeriodicReportsByCustomerUseCase,
   ) {}
 
-  @Roles([
-    'INTERNAL_MANAGEMENT',
-    'INTERNAL_PARTNERS',
-    'INTERNAL_FINANCIAL_LEGAL',
-  ])
   @Get()
   @HttpCode(200)
   async handle(
     @CurrentUser() user: UserPayload,
-    @Param('year') customerId: string,
+    @Param('customerId') customerId: string,
   ) {
     const result = await this.fetchPeriodicReportsByCustomerUseCase.execute({
       customerId,
+      userId: user.sub,
     })
 
     if (result.isLeft()) {
