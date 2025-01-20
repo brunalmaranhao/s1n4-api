@@ -11,6 +11,7 @@ export class ResponsiblePartiesPresenter {
       birthdate: responsible.birthdate,
       responsiblePartiesRole: responsible.responsiblePartiesRole,
       customerId: responsible.customerId.toString(),
+      customer: responsible.customer,
     }
   }
 }

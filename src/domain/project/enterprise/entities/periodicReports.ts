@@ -1,8 +1,12 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
-import { Project as PrismaProject, Status } from '@prisma/client'
+import { Customer, Project as PrismaProject, Status } from '@prisma/client'
 import { Project } from './project'
+
+export type ProjectProps = PrismaProject & {
+  customer?: Customer
+}
 
 export interface PeriodicReportProps {
   name: string
@@ -10,7 +14,7 @@ export interface PeriodicReportProps {
   year: string
   url: string
   projectId: UniqueEntityID
-  project?: Project | PrismaProject | null
+  project?: Project | PrismaProject | ProjectProps | null
   status: Status
   createdAt?: Date
   updatedAt?: Date | null

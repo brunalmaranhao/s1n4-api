@@ -23,4 +23,5 @@ export abstract class UserRepository {
   ): Promise<User[]>
 
   abstract fetchUsersAdmin(): Promise<User[]>
+  abstract countActiveUsersCustomers(): Promise<number>
 }

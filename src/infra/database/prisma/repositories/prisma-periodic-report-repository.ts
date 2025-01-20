@@ -40,6 +40,21 @@ export class PrismaPeriodicReportsRepository
     return reports.map(PrismaPeriodicReportMapper.toDomain)
   }
 
+  async findAllWithoutPagination(): Promise<PeriodicReport[]> {
+    const reports = await this.prisma.periodicReports.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        project: {
+          include: {
+            customer: true,
+          },
+        },
+      },
+    })
+
+    return reports.map(PrismaPeriodicReportMapper.toDomainWithProject)
+  }
+
   async findByName(name: string): Promise<PeriodicReport | null> {
     const report = await this.prisma.periodicReports.findFirst({
       where: { name, status: 'ACTIVE' },

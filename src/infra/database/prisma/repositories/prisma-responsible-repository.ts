@@ -12,6 +12,17 @@ export class PrismaResponsibleRepository
   implements ResponsiblePartiesRepository
 {
   constructor(private prisma: PrismaService) {}
+  async fetchAllResponsibleParties(): Promise<ResponsibleParties[]> {
+    const responsibles = await this.prisma.responsibleParties.findMany({
+      where: {
+        status: 'ACTIVE',
+      },
+      include: {
+        customer: true,
+      },
+    })
+    return responsibles.map(PrismaResponsibleMapper.toDomainWithCustomer)
+  }
 
   async fetchBirthdaysOfTheMonth(
     params: PaginationParams,

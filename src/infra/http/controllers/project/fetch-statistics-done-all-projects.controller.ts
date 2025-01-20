@@ -13,6 +13,7 @@ export class FetchStatisticsController {
     private fetchProjectByStatusUseCase: FetchProjectByStatusUseCase,
   ) {}
 
+  z
   @Roles([
     'INTERNAL_MANAGEMENT',
     'INTERNAL_PARTNERS',
