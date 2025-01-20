@@ -25,6 +25,8 @@ export abstract class ResponsiblePartiesRepository {
 
   abstract remove(id: string): Promise<void>
 
+  abstract fetchAllResponsibleParties(): Promise<ResponsibleParties[]>
+
   abstract fetchCustomerResponsibleParties(
     customerId: string,
     params: PaginationParams,

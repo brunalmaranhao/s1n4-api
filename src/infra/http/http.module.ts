@@ -185,6 +185,12 @@ import { FetchPeriodicReportsByCustomerController } from './controllers/periodic
 import { FetchPeriodicReportsByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-customer'
 import { FetchPeriodicReportsByCustomerAndYearUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-customer-and-year'
 import { FetchPeriodicReportsByCustomerAndYearController } from './controllers/periodic-reports/fetch-periodic-reports-by-customer-and-year.controller'
+import { CountUsersAndCustomersController } from './controllers/customer/count-customers-and-users.controller'
+import { CountUsersAndCustomersUseCase } from '@/domain/project/application/use-cases/count-users-and-customers'
+import { FetchActiveResponsiblePartiesUseCase } from '@/domain/project/application/use-cases/fetch-active-responsible-parties'
+import { FetchActivesReponsiblesController } from './controllers/responsibleParties/fetch-all-responsible-parties.controller'
+import { FetchAllPeriodicReportsController } from './controllers/periodic-reports/fetch-all-periodic-reports.controller'
+import { FetchAllPeriodicReportsUseCase } from '@/domain/project/application/use-cases/fetch-all-periodic-reports'
 
 @Module({
   imports: [
@@ -196,6 +202,9 @@ import { FetchPeriodicReportsByCustomerAndYearController } from './controllers/p
     StorageModule,
   ],
   controllers: [
+    FetchAllPeriodicReportsController,
+    CountUsersAndCustomersController,
+    FetchActivesReponsiblesController,
     AuthenticateController,
     CreateCustomerController,
     FetchCustomerController,
@@ -204,7 +213,6 @@ import { FetchPeriodicReportsByCustomerAndYearController } from './controllers/p
     FetchCustomersController,
     FetchCustomersWithUsersController,
     FetchCustomerUsersController,
-
     RemoveCustomerController,
     UpdateCustomerController,
     CreateInternalUserController,
@@ -380,6 +388,9 @@ import { FetchPeriodicReportsByCustomerAndYearController } from './controllers/p
     FetchListProjectsByCustomerAndDateUseCase,
     FetchPeriodicReportsByCustomerUseCase,
     FetchPeriodicReportsByCustomerAndYearUseCase,
+    CountUsersAndCustomersUseCase,
+    FetchActiveResponsiblePartiesUseCase,
+    FetchAllPeriodicReportsUseCase,
   ],
 })
 export class HttpModule {}

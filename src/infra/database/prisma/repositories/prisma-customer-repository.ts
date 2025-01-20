@@ -150,6 +150,16 @@ export class PrismaCustomersRepository implements CustomerRepository {
     return PrismaCustomerMapper.toDomain(newCustomer)
   }
 
+  async countActiveCustomers(): Promise<number> {
+    const totalActiveCustomers = await this.prisma.customer.count({
+      where: {
+        status: 'ACTIVE',
+      },
+    })
+
+    return totalActiveCustomers
+  }
+
   async fetchByStatus(
     status: Status,
     { page, size }: PaginationParams,

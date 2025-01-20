@@ -8,6 +8,13 @@ import { Status } from '@prisma/client'
 export class InMemoryUserRepository implements UserRepository {
   public items: User[] = []
 
+  async countActiveUsersCustomers(): Promise<number> {
+    const users = this.items.filter(
+      (user) => user.status === 'ACTIVE' && user.customerId,
+    )
+    return users.length
+  }
+
   async fetchUsersAdmin(): Promise<User[]> {
     const users = this.items.filter(
       (user) =>

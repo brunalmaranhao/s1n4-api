@@ -7,10 +7,6 @@ import {
   Param,
 } from '@nestjs/common'
 import { Roles } from '@/infra/auth/roles.decorator'
-import { CustomerPresenterAllFields } from '../../presenter/customer-presenter-all-fields'
-import { ResponsiblePartiesNotFoundError } from '@/domain/project/application/use-cases/errors/responsible-not-found-error'
-import { ResponsiblePartiesPresenter } from '../../presenter/responsible-parties'
-import { FetchResponsiblePartiesByIdUseCase } from '@/domain/project/application/use-cases/fetch-responsible-parties-by-id'
 import { UserNotFoundError } from '@/domain/project/application/use-cases/errors/user-not-found-error'
 import { FetchUserByIdUseCase } from '@/domain/project/application/use-cases/fetch-user-by-id'
 import { UserPresenter } from '../../presenter/user-presenter'
