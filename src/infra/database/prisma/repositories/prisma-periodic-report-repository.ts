@@ -107,7 +107,11 @@ export class PrismaPeriodicReportsRepository
         where: { project: { customerId }, status: 'ACTIVE' },
         orderBy: { createdAt: 'desc' },
         include: {
-          project: true,
+          project: {
+            include: {
+              customer: true,
+            },
+          },
         },
       }),
     ])
