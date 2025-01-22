@@ -191,6 +191,7 @@ import { FetchActiveResponsiblePartiesUseCase } from '@/domain/project/applicati
 import { FetchActivesReponsiblesController } from './controllers/responsibleParties/fetch-all-responsible-parties.controller'
 import { FetchAllPeriodicReportsController } from './controllers/periodic-reports/fetch-all-periodic-reports.controller'
 import { FetchAllPeriodicReportsUseCase } from '@/domain/project/application/use-cases/fetch-all-periodic-reports'
+import { FetchBudgetExpenseBalanceAllCustomersController } from './controllers/budget-expenses/fetch-budget-expense-balance-all-customers.controller'
 
 @Module({
   imports: [
@@ -202,6 +203,7 @@ import { FetchAllPeriodicReportsUseCase } from '@/domain/project/application/use
     StorageModule,
   ],
   controllers: [
+    FetchBudgetExpenseBalanceAllCustomersController,
     FetchAllPeriodicReportsController,
     CountUsersAndCustomersController,
     FetchActivesReponsiblesController,

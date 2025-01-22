@@ -19,7 +19,7 @@ const createProjectBodySchema = z.object({
   start: z.coerce.date().optional(),
   deadline: z.coerce.date().optional(),
   customerId: z.string(),
-  budget: z.number(),
+  budget: z.number().optional(),
   listProjectsId: z.string(),
   description: z.string(),
 })
@@ -54,7 +54,7 @@ export class CreateProjectController {
       customerId,
       start,
       deadline,
-      budget,
+      budget: budget ?? 0,
       listProjectsId,
       description,
     })
