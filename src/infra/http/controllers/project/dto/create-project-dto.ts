@@ -14,7 +14,7 @@ export class CreateProjectDto {
   customerId!: string
 
   @ApiProperty()
-  budget!: number
+  budget?: number
 
   @ApiProperty()
   listProjectsId!: string
