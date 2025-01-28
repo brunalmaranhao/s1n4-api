@@ -51,6 +51,7 @@ export class FetchListProjectByUserController {
             deadline: itemProject.deadline,
             description: itemProject.description,
             customer: itemProject.customer,
+            start: itemProject.start,
             tags: itemProject.tags,
             listProjects: itemProject.listProjects,
             budget: itemProject.budget,

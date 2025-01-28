@@ -52,6 +52,9 @@ export class PrismaListProjectRepository implements ListProjectRepository {
       where: {
         id,
       },
+      include: {
+        projects: true,
+      },
     })
 
     if (!list) {
@@ -121,7 +124,11 @@ export class PrismaListProjectRepository implements ListProjectRepository {
             },
           },
           include: {
-            customer: true,
+            customer: {
+              include: {
+                responsibleParties: true,
+              },
+            },
             tags: {
               where: {
                 status: 'ACTIVE',

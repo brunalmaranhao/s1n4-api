@@ -5,7 +5,7 @@ import { ProjectRepository } from '@/domain/project/application/repositories/pro
 import { Project } from '@/domain/project/enterprise/entities/project'
 import { PrismaProjectMapper } from '../mappers/prisma-project-mapper'
 import { EditProjectProps } from '@/core/types/edit-project-props'
-import { Status, StatusProject } from '@prisma/client'
+import { Prisma, Status, StatusProject } from '@prisma/client'
 import { Tag } from '@/domain/project/enterprise/entities/tags'
 
 @Injectable()
@@ -247,6 +247,46 @@ export class PrismaProjectRepository implements ProjectRepository {
       data,
     })
     return PrismaProjectMapper.toDomain(newProject)
+  }
+
+  async findOverdueProjects(
+    date: Date,
+    customerId?: string,
+  ): Promise<{ overdueProjects: Project[]; totalActiveProjects: number }> {
+    const whereCondition: Prisma.ProjectWhereInput = {
+      AND: [
+        { deadline: { lt: date } },
+        { status: 'ACTIVE' },
+        ...(customerId ? [{ customerId }] : []),
+      ],
+    }
+
+    const overdueProjects = await this.prisma.project.findMany({
+      where: whereCondition,
+      include: {
+        customer: true,
+        tags: true,
+      },
+      orderBy: {
+        deadline: 'asc',
+      },
+    })
+
+    const totalActiveProjects = await this.prisma.project.count({
+      where: {
+        status: {
+          not: 'INACTIVE',
+        },
+        ...(customerId && { customerId }),
+      },
+    })
+
+    return {
+      overdueProjects: overdueProjects.map(
+        PrismaProjectMapper.toDomainWithCustomer,
+      ),
+      totalActiveProjects,
+    }
   }
 
   async getProjectsByDateRange(

@@ -11,6 +11,22 @@ import { Status, StatusProject, Tag as PrismaTag } from '@prisma/client'
 export class InMemoryProjectRepository implements ProjectRepository {
   public items: Project[] = []
 
+  async findOverdueProjects(
+    date: Date,
+    customerId?: string,
+  ): Promise<{ overdueProjects: Project[]; totalActiveProjects: number }> {
+    const projects = this.items.filter((project) => {
+      const isOverdue = project.deadline && project.deadline <= date
+      const matchesCustomer = customerId
+        ? project.customerId.toString() === customerId
+        : true
+      const activeProject = project.status === 'ACTIVE'
+      return isOverdue && matchesCustomer && activeProject
+    })
+
+    return { overdueProjects: projects, totalActiveProjects: this.items.length }
+  }
+
   async findByNameAndCustomer(
     name: string,
     customerId: string,
@@ -28,9 +44,6 @@ export class InMemoryProjectRepository implements ProjectRepository {
     endDate: Date,
     customerId: string,
   ): Promise<Project[]> {
-    console.log('hey you')
-    console.log(startDate, endDate)
-    console.log(customerId)
     const projects = this.items.filter(
       (project) =>
         project.customerId.toString() === customerId &&
