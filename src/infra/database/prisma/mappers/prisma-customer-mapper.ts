@@ -4,6 +4,7 @@ import {
   CustomerAddress,
   User as PrismaUser,
   Project as PrismaProject,
+  ResponsibleParties as PrismaResponsibleParties,
 } from '@prisma/client'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Customer } from '@/domain/project/enterprise/entities/customer'
@@ -15,10 +16,12 @@ type PrismaCustomerProps = PrismaCustomer & {
 type PrismaCustomerWithProjectProps = PrismaCustomer & {
   projects: PrismaProject[]
   users?: PrismaUser[]
+  address?: CustomerAddress[]
 }
 
 type PrismaCustomerWithUsersProps = PrismaCustomer & {
   users?: PrismaUser[]
+  projects?: PrismaProject[]
 }
 
 type PrismaCustomerWithAdressAndUsers = PrismaCustomer & {
@@ -30,6 +33,7 @@ type PrismaCustomerWithAllFields = PrismaCustomer & {
   address?: CustomerAddress[]
   users?: PrismaUser[]
   projects: PrismaProject[]
+  responsibleParties?: PrismaResponsibleParties[]
 }
 
 export class PrismaCustomerMapper {
@@ -71,6 +75,7 @@ export class PrismaCustomerMapper {
         createdAt: raw.createdAt,
         projects: raw.projects,
         users: raw.users,
+        address: raw.address,
       },
       new UniqueEntityID(raw.id),
     )
@@ -94,6 +99,7 @@ export class PrismaCustomerMapper {
         address: raw.address,
         users: raw.users,
         projects: raw.projects,
+        responsibleParties: raw.responsibleParties,
       },
       new UniqueEntityID(raw.id),
     )
@@ -136,6 +142,7 @@ export class PrismaCustomerMapper {
         status: raw.status,
         createdAt: raw.createdAt,
         users: raw.users,
+        projects: raw.projects,
       },
       new UniqueEntityID(raw.id),
     )

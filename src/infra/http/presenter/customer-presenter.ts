@@ -70,10 +70,7 @@ export class CustomerPresenter {
       name: customer.name,
       cnpj: customer.cnpj,
       corporateName: customer.corporateName,
-      zipCode:
-        customer.address &&
-        customer.address?.length >= 1 &&
-        customer.address[0].zipCode,
+      address: customer.address,
       accumulatedInvestment: customer.accumulatedInvestment,
       contractDuration: customer.contractDuration,
       contractObjective: customer.contractObjective,

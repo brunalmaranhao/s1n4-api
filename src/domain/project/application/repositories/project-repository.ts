@@ -57,4 +57,9 @@ export abstract class ProjectRepository {
     endDate: Date,
     customerId: string,
   ): Promise<Project[]>
+
+  abstract findOverdueProjects(
+    date: Date,
+    customerId?: string,
+  ): Promise<{ overdueProjects: Project[]; totalActiveProjects: number }>
 }

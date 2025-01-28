@@ -33,6 +33,8 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
                 users: true,
               },
             },
+            listProjects: true,
+            tags: true,
           },
         },
         comments: {
@@ -71,6 +73,8 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
                 address: true,
               },
             },
+            tags: true,
+            listProjects: true,
           },
         },
         comments: {
@@ -201,6 +205,8 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
                 address: true,
               },
             },
+            tags: true,
+            listProjects: true,
           },
         },
         comments: {

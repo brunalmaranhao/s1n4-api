@@ -18,6 +18,7 @@ export class CustomersWithUsersPresenter {
       status: customer.status,
       createdAt: customer.createdAt,
       users: customer.users,
+      projects: customer.projects,
     }
   }
 }

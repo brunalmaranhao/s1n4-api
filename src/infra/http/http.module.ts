@@ -192,6 +192,8 @@ import { FetchActivesReponsiblesController } from './controllers/responsiblePart
 import { FetchAllPeriodicReportsController } from './controllers/periodic-reports/fetch-all-periodic-reports.controller'
 import { FetchAllPeriodicReportsUseCase } from '@/domain/project/application/use-cases/fetch-all-periodic-reports'
 import { FetchBudgetExpenseBalanceAllCustomersController } from './controllers/budget-expenses/fetch-budget-expense-balance-all-customers.controller'
+import { FetchOverdueProjectsController } from './controllers/project/fetch-overdue-projects.controller'
+import { FetchOverdueProjectsUseCase } from '@/domain/project/application/use-cases/fetch-overdue-projects'
 
 @Module({
   imports: [
@@ -203,6 +205,7 @@ import { FetchBudgetExpenseBalanceAllCustomersController } from './controllers/b
     StorageModule,
   ],
   controllers: [
+    FetchOverdueProjectsController,
     FetchBudgetExpenseBalanceAllCustomersController,
     FetchAllPeriodicReportsController,
     CountUsersAndCustomersController,
@@ -301,6 +304,7 @@ import { FetchBudgetExpenseBalanceAllCustomersController } from './controllers/b
     FetchPeriodicReportsByCustomerAndYearController,
   ],
   providers: [
+    FetchOverdueProjectsUseCase,
     AuthenticateUserUseCase,
     CreateCustomerUseCase,
     FetchCostumersByStatusUseCase,
