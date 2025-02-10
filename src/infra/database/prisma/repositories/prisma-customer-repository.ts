@@ -22,6 +22,13 @@ export class PrismaCustomersRepository implements CustomerRepository {
       },
       include: {
         users: true,
+        projects: {
+          where: {
+            status: {
+              not: 'INACTIVE',
+            },
+          },
+        },
       },
       take: amount,
       skip: (page - 1) * amount,
@@ -150,11 +157,21 @@ export class PrismaCustomersRepository implements CustomerRepository {
     return PrismaCustomerMapper.toDomain(newCustomer)
   }
 
+  async countActiveCustomers(): Promise<number> {
+    const totalActiveCustomers = await this.prisma.customer.count({
+      where: {
+        status: 'ACTIVE',
+      },
+    })
+
+    return totalActiveCustomers
+  }
+
   async fetchByStatus(
     status: Status,
     { page, size }: PaginationParams,
   ): Promise<{ customers: Customer[]; total: number }> {
-    const amount = size || 10
+    const amount = size || 1000
     const [customers, total] = await this.prisma.$transaction([
       this.prisma.customer.findMany({
         where: {
@@ -166,7 +183,17 @@ export class PrismaCustomersRepository implements CustomerRepository {
         include: {
           address: true,
           users: true,
-          projects: true,
+          projects: {
+            where: {
+              status: {
+                not: 'INACTIVE',
+              },
+            },
+            include: {
+              periodicReports: true,
+            },
+          },
+          responsibleParties: true,
         },
         take: amount,
         skip: (page - 1) * amount,
@@ -184,8 +211,6 @@ export class PrismaCustomersRepository implements CustomerRepository {
     }
   }
 
-  s
-
   async fetchByStatusWithoutPagination(
     status: Status,
   ): Promise<{ customers: Customer[]; total: number }> {
@@ -199,6 +224,17 @@ export class PrismaCustomersRepository implements CustomerRepository {
         },
         include: {
           address: true,
+          projects: {
+            where: {
+              status: {
+                not: 'INACTIVE',
+              },
+            },
+            include: {
+              periodicReports: true,
+            },
+          },
+          users: true,
         },
       }),
       this.prisma.customer.count({
@@ -209,7 +245,7 @@ export class PrismaCustomersRepository implements CustomerRepository {
     ])
 
     return {
-      customers: customers.map(PrismaCustomerMapper.toDomainWithAddress),
+      customers: customers.map(PrismaCustomerMapper.toDomainWithProjects),
       total,
     }
   }

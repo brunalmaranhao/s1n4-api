@@ -7,6 +7,7 @@ import {
 
 type BudgetExpenseProps = PrismaBudgetExpense & {
   project: ProjectWithCustomerProps
+  status: 'ACTIVE' | 'INACTIVE'
 }
 
 export class PrismaBudgetExpenseMapper {
@@ -21,6 +22,7 @@ export class PrismaBudgetExpenseMapper {
         projectId: new UniqueEntityID(raw.projectId),
         createdAt: raw.createdAt,
         project: raw.project,
+        status: raw.status,
       },
       new UniqueEntityID(raw.id),
     )

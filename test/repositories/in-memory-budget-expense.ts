@@ -1,7 +1,9 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { PaginationParams } from '@/core/repositories/pagination-params'
+import { UpdateBudgetExpenseProps } from '@/core/types/budget-expense-props'
 import { BudgetExpenseRepository } from '@/domain/project/application/repositories/budget-expense'
-import { BudgetExpense } from '@/domain/project/enterprise/entities/BudgetExpense'
+import { BudgetExpense } from '@/domain/project/enterprise/entities/b udgetExpense'
+import { BudgetExpense } from '@/domain/project/enterprise/entities/budgetExpense'
 import { Status } from '@prisma/client'
 
 export class InMemoryBudgetExpenseRepository

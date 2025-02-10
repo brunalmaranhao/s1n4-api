@@ -33,6 +33,16 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
                 users: true,
               },
             },
+            listProjects: true,
+            tags: true,
+          },
+        },
+        comments: {
+          include: {
+            author: true,
+          },
+          where: {
+            status: 'ACTIVE',
           },
         },
         user: true,
@@ -63,6 +73,19 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
                 address: true,
               },
             },
+            tags: true,
+            listProjects: true,
+          },
+        },
+        comments: {
+          include: {
+            author: true,
+          },
+          where: {
+            status: 'ACTIVE',
+          },
+          orderBy: {
+            createdAt: 'asc',
           },
         },
         user: true,
@@ -94,6 +117,7 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
       where: { id },
       data: {
         description,
+        updatedAt: new Date(),
       },
     })
 
@@ -113,6 +137,11 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
                 users: true,
               },
             },
+          },
+        },
+        comments: {
+          include: {
+            author: true,
           },
         },
         user: true,
@@ -136,6 +165,11 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
             },
           },
         },
+        comments: {
+          include: {
+            author: true,
+          },
+        },
         user: true,
       },
     })
@@ -155,5 +189,56 @@ export class PrismaProjectUpdateRepository implements ProjectUpdateRepository {
     })
     DomainEvents.dispatchEventsForAggregate(project.id)
     return PrismaProjectUpdateMapper.toDomain(newProject)
+  }
+
+  async fetchByProjectId(projectId: string): Promise<ProjectUpdate[]> {
+    const projects = await this.prisma.projectUpdates.findMany({
+      where: {
+        status: 'ACTIVE',
+        projectId,
+      },
+      include: {
+        project: {
+          include: {
+            customer: {
+              include: {
+                address: true,
+              },
+            },
+            tags: true,
+            listProjects: true,
+          },
+        },
+        comments: {
+          include: {
+            author: true,
+            reactions: {
+              include: {
+                emoji: true,
+                user: true,
+              },
+            },
+          },
+          where: {
+            status: 'ACTIVE',
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+        reactions: {
+          include: {
+            emoji: true,
+            user: true,
+          },
+        },
+        user: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    return projects.map(PrismaProjectUpdateMapper.toDomainWithProject)
   }
 }

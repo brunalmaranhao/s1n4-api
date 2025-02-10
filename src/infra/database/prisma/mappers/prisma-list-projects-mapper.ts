@@ -20,6 +20,7 @@ export class PrismaListProjectsMapper {
         updatedAt: raw.updatedAt,
         projects: raw.projects,
         order: raw.order,
+        isDone: raw.isDone,
       },
       new UniqueEntityID(raw.id),
     )
@@ -34,6 +35,7 @@ export class PrismaListProjectsMapper {
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         order: raw.order,
+        isDone: raw.isDone,
       },
       new UniqueEntityID(raw.id),
     )
@@ -50,6 +52,7 @@ export class PrismaListProjectsMapper {
       createdAt: listProjects.createdAt,
       updatedAt: listProjects.updatedAt,
       order: listProjects.order,
+      isDone: listProjects.isDone,
     }
   }
 }

@@ -5,11 +5,24 @@ import { ProjectRepository } from '@/domain/project/application/repositories/pro
 import { Project } from '@/domain/project/enterprise/entities/project'
 import { PrismaProjectMapper } from '../mappers/prisma-project-mapper'
 import { EditProjectProps } from '@/core/types/edit-project-props'
-import { Status } from '@prisma/client'
+import { Prisma, Status, StatusProject } from '@prisma/client'
+import { Tag } from '@/domain/project/enterprise/entities/tags'
 
 @Injectable()
 export class PrismaProjectRepository implements ProjectRepository {
   constructor(private prisma: PrismaService) {}
+  async updateName(id: string, name: string): Promise<Project> {
+    const project = await this.prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    })
+
+    return PrismaProjectMapper.toDomain(project)
+  }
 
   async fetchCustomerProjects(customerId: string): Promise<Project[]> {
     const projects = await this.prisma.project.findMany({
@@ -115,6 +128,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       skip: (page - 1) * amount,
       include: {
         customer: true,
+        tags: true,
       },
     })
     return project.map(PrismaProjectMapper.toDomainWithCustomer)
@@ -128,6 +142,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       this.prisma.project.findMany({
         include: {
           customer: true,
+          tags: true,
         },
         where: {
           status: {
@@ -147,10 +162,74 @@ export class PrismaProjectRepository implements ProjectRepository {
     }
   }
 
+  async findByStatus(status: StatusProject): Promise<{
+    projects: Project[]
+    total: number
+  }> {
+    const [projects, total] = await this.prisma.$transaction([
+      this.prisma.project.findMany({
+        include: {
+          customer: true,
+          tags: true,
+        },
+        where: {
+          status,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      this.prisma.project.count(),
+    ])
+    // console.log(projects)
+    return {
+      projects: projects.map(PrismaProjectMapper.toDomainWithCustomer),
+      total,
+    }
+  }
+
+  async findByStatusAndCustomer(
+    status: StatusProject,
+    customer: string,
+  ): Promise<{
+    projects: Project[]
+    total: number
+  }> {
+    const [projects, total] = await this.prisma.$transaction([
+      this.prisma.project.findMany({
+        include: {
+          customer: true,
+          tags: true,
+        },
+        where: {
+          status,
+          customerId: customer,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      this.prisma.project.count({
+        where: {
+          customerId: customer,
+        },
+      }),
+    ])
+
+    return {
+      projects: projects.map(PrismaProjectMapper.toDomainWithCustomer),
+      total,
+    }
+  }
+
   async findById(id: string): Promise<Project | null> {
     const project = await this.prisma.project.findUnique({
       where: {
         id,
+      },
+      include: {
+        customer: true,
+        tags: true,
       },
     })
 
@@ -158,7 +237,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       return null
     }
 
-    return PrismaProjectMapper.toDomain(project)
+    return PrismaProjectMapper.toDomainWithCustomer(project)
   }
 
   async create(project: Project): Promise<Project> {
@@ -170,12 +249,78 @@ export class PrismaProjectRepository implements ProjectRepository {
     return PrismaProjectMapper.toDomain(newProject)
   }
 
+  async findOverdueProjects(
+    date: Date,
+    customerId?: string,
+  ): Promise<{ overdueProjects: Project[]; totalActiveProjects: number }> {
+    const whereCondition: Prisma.ProjectWhereInput = {
+      AND: [
+        { deadline: { lt: date } },
+        { status: 'ACTIVE' },
+        ...(customerId ? [{ customerId }] : []),
+      ],
+    }
+
+    const overdueProjects = await this.prisma.project.findMany({
+      where: whereCondition,
+      include: {
+        customer: true,
+        tags: true,
+      },
+      orderBy: {
+        deadline: 'asc',
+      },
+    })
+
+    const totalActiveProjects = await this.prisma.project.count({
+      where: {
+        status: {
+          not: 'INACTIVE',
+        },
+        ...(customerId && { customerId }),
+      },
+    })
+
+    return {
+      overdueProjects: overdueProjects.map(
+        PrismaProjectMapper.toDomainWithCustomer,
+      ),
+      totalActiveProjects,
+    }
+  }
+
+  async getProjectsByDateRange(
+    startDate: Date,
+    endDate: Date,
+    customerId: string,
+  ): Promise<Project[]> {
+    const projects = await this.prisma.project.findMany({
+      where: {
+        customerId,
+        AND: [
+          {
+            start: { lte: endDate },
+          },
+          {
+            deadline: { gte: startDate },
+          },
+        ],
+      },
+      include: {
+        customer: true,
+        tags: true,
+      },
+    })
+
+    return projects.map(PrismaProjectMapper.toDomainWithCustomer)
+  }
+
   async addProjectList(
     projectId: string,
     listProjectId: string,
     shouldSaveUpdateDate: boolean,
   ): Promise<void> {
-    console.log(shouldSaveUpdateDate)
+    // console.log(shouldSaveUpdateDate)
     const updateData: Record<string, any> = {
       listProjectsId: listProjectId,
     }
@@ -202,6 +347,40 @@ export class PrismaProjectRepository implements ProjectRepository {
       },
       data: {
         shouldShowInformationsToCustomerUser: value,
+      },
+    })
+  }
+
+  async finishOrActive(id: string, isFinish: boolean): Promise<void> {
+    await this.prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        status: isFinish ? 'DONE' : 'ACTIVE',
+        finishedAt: isFinish ? new Date() : null,
+      },
+    })
+  }
+
+  async addTagToProject(projectId: string, tag: Tag): Promise<void> {
+    await this.prisma.project.update({
+      where: { id: projectId },
+      data: {
+        tags: {
+          connect: { id: tag.id.toString() },
+        },
+      },
+    })
+  }
+
+  async removeTagFromProject(projectId: string, tagId: string): Promise<void> {
+    await this.prisma.project.update({
+      where: { id: projectId },
+      data: {
+        tags: {
+          disconnect: { id: tagId },
+        },
       },
     })
   }

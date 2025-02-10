@@ -8,9 +8,11 @@ import { ProjectRepository } from '../repositories/project-repository'
 interface CreateProjectUseCaseRequest {
   name: string
   customerId: string
-  deadline: Date | null
+  start: Date
+  deadline: Date
   budget: number
   listProjectsId: string
+  description: string
 }
 
 type CreateProjectUseCaseResponse = Either<
@@ -27,9 +29,11 @@ export class CreateProjectUseCase {
   async execute({
     name,
     customerId,
+    start,
     deadline,
     budget,
     listProjectsId,
+    description,
   }: CreateProjectUseCaseRequest): Promise<CreateProjectUseCaseResponse> {
     const projectAlreadyExists =
       await this.projectRepository.findByNameAndCustomer(name, customerId)
@@ -41,10 +45,12 @@ export class CreateProjectUseCase {
     const newProject = Project.create({
       name,
       customerId: new UniqueEntityID(customerId),
+      start,
       deadline,
       budget,
       listProjectsId: new UniqueEntityID(listProjectsId),
       updatedListProjectAt: new Date(),
+      description,
     })
 
     const project = await this.projectRepository.create(newProject)

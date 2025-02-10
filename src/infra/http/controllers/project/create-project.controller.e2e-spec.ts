@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { UserFactory } from 'test/factories/make-user'
+import { ListProjectFactory } from 'test/factories/make-list-project-repository'
 
 describe('Create Project (E2E)', () => {
   let app: INestApplication
@@ -14,17 +15,19 @@ describe('Create Project (E2E)', () => {
   let jwt: JwtService
   let userFactory: UserFactory
   let customerFactory: CustomerFactory
+  let listProjectFactory: ListProjectFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, CustomerFactory],
+      providers: [UserFactory, CustomerFactory, ListProjectFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
     userFactory = moduleRef.get(UserFactory)
     customerFactory = moduleRef.get(CustomerFactory)
+    listProjectFactory = moduleRef.get(ListProjectFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
@@ -39,6 +42,10 @@ describe('Create Project (E2E)', () => {
 
     const customer = await customerFactory.makePrismaCustomer()
 
+    const listProject = await listProjectFactory.makePrismaListProject({
+      customerId: customer.id,
+    })
+
     const response = await request(app.getHttpServer())
       .post('/project')
       .set('Authorization', `Bearer ${accessToken}`)
@@ -46,8 +53,11 @@ describe('Create Project (E2E)', () => {
         name: 'Projeto de Teste',
         customerId: customer.id.toString(),
         deadline: '2024-01-01',
+        listProjectsId: listProject.id.toString(),
+        budget: 120,
+        description: 'Teste',
       })
-
+    console.log(response)
     expect(response.statusCode).toBe(201)
 
     const projectOnDatabase = await prisma.project.findFirst({

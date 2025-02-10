@@ -1,7 +1,8 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { Project } from '../../enterprise/entities/project'
 import { EditProjectProps } from '@/core/types/edit-project-props'
-import { Status } from '@prisma/client'
+import { Status, StatusProject } from '@prisma/client'
+import { Tag } from '../../enterprise/entities/tags'
 
 export abstract class ProjectRepository {
   abstract create(project: Project): Promise<Project>
@@ -19,6 +20,7 @@ export abstract class ProjectRepository {
   }>
 
   abstract update(id: string, project: EditProjectProps): Promise<Project>
+  abstract updateName(id: string, name: string): Promise<Project>
   abstract remove(id: string): Promise<void>
   abstract fetchByStatus(
     status: Status,
@@ -36,4 +38,28 @@ export abstract class ProjectRepository {
     id: string,
     value: boolean,
   ): Promise<void>
+
+  abstract finishOrActive(id: string, isFinish: boolean): Promise<void>
+
+  abstract findByStatus(
+    status: StatusProject,
+  ): Promise<{ projects: Project[]; total: number }>
+
+  abstract findByStatusAndCustomer(
+    status: StatusProject,
+    customer: string,
+  ): Promise<{ projects: Project[]; total: number }>
+
+  abstract addTagToProject(projectId: string, tag: Tag): Promise<void>
+  abstract removeTagFromProject(projectId: string, tagId: string): Promise<void>
+  abstract getProjectsByDateRange(
+    startDate: Date,
+    endDate: Date,
+    customerId: string,
+  ): Promise<Project[]>
+
+  abstract findOverdueProjects(
+    date: Date,
+    customerId?: string,
+  ): Promise<{ overdueProjects: Project[]; totalActiveProjects: number }>
 }

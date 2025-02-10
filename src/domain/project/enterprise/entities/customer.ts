@@ -7,10 +7,12 @@ import {
   User as PrismaUser,
   CustomerAddress as PrismaCustomerAddress,
   Project as PrismaProject,
+  ResponsibleParties as PrismaResponsibleParties,
 } from '@prisma/client'
 import { CustomerAddress } from './customerAddress'
 import { User } from './user'
 import { Project } from './project'
+import { ResponsibleParties } from './responsibleParties'
 
 export interface CustomerProps {
   name: string
@@ -29,9 +31,14 @@ export interface CustomerProps {
   address?: CustomerAddress[] | PrismaCustomerAddress[] | null
   users?: User[] | PrismaUser[]
   projects?: Project[] | PrismaProject[]
+  responsibleParties?: ResponsibleParties[] | PrismaResponsibleParties[]
 }
 
 export class Customer extends Entity<CustomerProps> {
+  get responsibleParties() {
+    return this.props.responsibleParties
+  }
+
   get address() {
     return this.props.address
   }

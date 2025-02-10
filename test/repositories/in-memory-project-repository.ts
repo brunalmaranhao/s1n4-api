@@ -3,11 +3,88 @@ import { PaginationParams } from '@/core/repositories/pagination-params'
 import { EditProjectProps } from '@/core/types/edit-project-props'
 import { ProjectRepository } from '@/domain/project/application/repositories/project-repository'
 import { ProjectNotFoundError } from '@/domain/project/application/use-cases/errors/project-not-found-error'
+import { TagNotFoundError } from '@/domain/project/application/use-cases/errors/tag-not-found-error'
 import { Project } from '@/domain/project/enterprise/entities/project'
-import { Status } from '@prisma/client'
+import { Tag } from '@/domain/project/enterprise/entities/tags'
+import { Status, StatusProject, Tag as PrismaTag } from '@prisma/client'
 
 export class InMemoryProjectRepository implements ProjectRepository {
   public items: Project[] = []
+
+  async findOverdueProjects(
+    date: Date,
+    customerId?: string,
+  ): Promise<{ overdueProjects: Project[]; totalActiveProjects: number }> {
+    const projects = this.items.filter((project) => {
+      const isOverdue = project.deadline && project.deadline <= date
+      const matchesCustomer = customerId
+        ? project.customerId.toString() === customerId
+        : true
+      const activeProject = project.status === 'ACTIVE'
+      return isOverdue && matchesCustomer && activeProject
+    })
+
+    return { overdueProjects: projects, totalActiveProjects: this.items.length }
+  }
+
+  async findByNameAndCustomer(
+    name: string,
+    customerId: string,
+  ): Promise<Project | null> {
+    const projects = this.items.find(
+      (project) =>
+        project.customerId.toString() === customerId && project.name === name,
+    )
+    if (!projects) return null
+    return projects
+  }
+
+  async getProjectsByDateRange(
+    startDate: Date,
+    endDate: Date,
+    customerId: string,
+  ): Promise<Project[]> {
+    const projects = this.items.filter(
+      (project) =>
+        project.customerId.toString() === customerId &&
+        project.start &&
+        project.deadline &&
+        project.start <= endDate &&
+        project.deadline >= startDate,
+    )
+
+    return projects
+  }
+
+  async updateShouldShowInformationsToCustomerUser(
+    id: string,
+    value: boolean,
+  ): Promise<void> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === id,
+    )
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    existingProject.shouldShowInformationsToCustomerUser = value
+  }
+
+  async finishOrActive(id: string, isFinished: boolean): Promise<void> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === id,
+    )
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    existingProject.finishedAt = isFinished ? new Date() : null
+  }
+
   async addProjectList(
     projectId: string,
     listProjectId: string,
@@ -82,6 +159,21 @@ export class InMemoryProjectRepository implements ProjectRepository {
     return existingProject
   }
 
+  async updateName(id: string, name: string): Promise<Project> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === id,
+    )
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    existingProject.name = name
+
+    return existingProject
+  }
+
   async remove(id: string): Promise<void> {
     const projectIndex = this.items.findIndex(
       (item) => item.id.toString() === id,
@@ -98,5 +190,66 @@ export class InMemoryProjectRepository implements ProjectRepository {
   ): Promise<Project[]> {
     const projects = this.items.filter((item) => item.status === status)
     return projects
+  }
+
+  async findByStatus(
+    status: StatusProject,
+  ): Promise<{ projects: Project[]; total: number }> {
+    const projects = this.items.filter((item) => item.status === status)
+    return { projects, total: projects.length }
+  }
+
+  async findByStatusAndCustomer(
+    status: StatusProject,
+    customer: string,
+  ): Promise<{ projects: Project[]; total: number }> {
+    const projectsCustomer = this.items.filter(
+      (item) => item.customerId.toString() === customer,
+    )
+    const projects = this.items.filter(
+      (item) =>
+        item.status === status && item.customerId.toString() === customer,
+    )
+    return { projects, total: projectsCustomer.length }
+  }
+
+  async addTagToProject(projectId: string, tag: Tag): Promise<void> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === projectId,
+    )
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    const tagExists = existingProject?.tags?.some(
+      (item) => item.id.toString() === tag.id.toString(),
+    )
+
+    if (!tagExists) {
+      existingProject.tags = [tag]
+    }
+  }
+
+  async removeTagFromProject(projectId: string, tagId: string): Promise<void> {
+    const projectIndex = this.items.findIndex(
+      (item) => item.id.toString() === projectId,
+    )
+
+    if (projectIndex === -1) {
+      throw new ProjectNotFoundError()
+    }
+
+    const existingProject = this.items[projectIndex]
+
+    if (!existingProject?.tags?.some((item) => item.id.toString() === tagId)) {
+      throw new TagNotFoundError()
+    }
+    const tagsFilter = existingProject.tags.filter(
+      (item) => item.id.toString() !== tagId,
+    )
+
+    existingProject.tags = tagsFilter as Tag[]
   }
 }

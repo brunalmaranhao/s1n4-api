@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { CustomerFactory } from 'test/factories/make-customer'
+import { ListProjectFactory } from 'test/factories/make-list-project-repository'
 import { ProjectFactory } from 'test/factories/make-project'
 import { ProjectUpdatesFactory } from 'test/factories/make-project-updates'
 import { UserFactory } from 'test/factories/make-user'
@@ -16,6 +17,7 @@ describe('Update Project Updates(E2E)', () => {
   let jwt: JwtService
   let userFactory: UserFactory
   let projectUpdateFactory: ProjectUpdatesFactory
+  let listProjectFactory: ListProjectFactory
   let customerFactory: CustomerFactory
   let projectFactory: ProjectFactory
 
@@ -27,6 +29,7 @@ describe('Update Project Updates(E2E)', () => {
         ProjectUpdatesFactory,
         CustomerFactory,
         ProjectFactory,
+        ListProjectFactory,
       ],
     }).compile()
 
@@ -37,6 +40,7 @@ describe('Update Project Updates(E2E)', () => {
     jwt = moduleRef.get(JwtService)
     projectFactory = moduleRef.get(ProjectFactory)
     customerFactory = moduleRef.get(CustomerFactory)
+    listProjectFactory = moduleRef.get(ListProjectFactory)
 
     await app.init()
   })
@@ -50,8 +54,13 @@ describe('Update Project Updates(E2E)', () => {
 
     const customer = await customerFactory.makePrismaCustomer()
 
+    const listProject = await listProjectFactory.makePrismaListProject({
+      customerId: customer.id,
+    })
+
     const project = await projectFactory.makePrismaProject({
       customerId: customer.id,
+      listProjectsId: listProject.id,
     })
 
     const projectUpdate = await projectUpdateFactory.makePrismaProject({

@@ -1,26 +1,66 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
-import { Customer as PrismaCustomer, Status } from '@prisma/client'
+import {
+  Customer as PrismaCustomer,
+  StatusProject,
+  Tag as PrismaTag,
+} from '@prisma/client'
 import { Customer } from './customer'
+import { Tag } from './tags'
 
 export interface ProjectProps {
   name: string
   deadline?: Date | null
-  status: Status
+  start?: Date | null
+  status: StatusProject
   customerId: UniqueEntityID
   createdAt: Date
   updatedAt?: Date | null
   customer?: Customer | PrismaCustomer | null
+  tags?: Tag[] | null | PrismaTag[]
   budget?: number | null
   listProjectsId: UniqueEntityID
   updatedListProjectAt?: Date | null
   shouldShowInformationsToCustomerUser: boolean
+  finishedAt?: Date | null
+  description?: string | null
 }
 
 export class Project extends Entity<ProjectProps> {
+  get start() {
+    return this.props.start
+  }
+
+  get description() {
+    return this.props.description
+  }
+
+  get tags() {
+    return this.props.tags
+  }
+
+  set tags(tags) {
+    this.props.tags = tags
+  }
+
   get shouldShowInformationsToCustomerUser() {
     return this.props.shouldShowInformationsToCustomerUser
+  }
+
+  set shouldShowInformationsToCustomerUser(
+    shouldShowInformationsToCustomerUser,
+  ) {
+    this.props.shouldShowInformationsToCustomerUser =
+      shouldShowInformationsToCustomerUser
+  }
+
+  get finishedAt() {
+    return this.props.finishedAt
+  }
+
+  set finishedAt(finishedAt) {
+    this.props.finishedAt = finishedAt
   }
 
   get updatedListProjectAt() {
@@ -71,7 +111,7 @@ export class Project extends Entity<ProjectProps> {
     return this.props.status
   }
 
-  set status(status: Status) {
+  set status(status: StatusProject) {
     this.props.status = status
   }
 

@@ -15,6 +15,7 @@ async function bootstrap() {
       'http://localhost:3333',
       'http://localhost:3000',
       'http://localhost:3001',
+      'https://sina-web.vercel.app',
       'https://sina-web-5p44.vercel.app',
       'https://gruposina.com',
     ],

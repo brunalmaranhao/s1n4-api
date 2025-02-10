@@ -150,4 +150,15 @@ export class PrismaUsersRepository implements UserRepository {
       },
     })
   }
+
+  async countActiveUsersCustomers(): Promise<number> {
+    const activeUsersCount = await this.prisma.user.count({
+      where: {
+        status: 'ACTIVE',
+        customerId: { not: null },
+      },
+    })
+
+    return activeUsersCount
+  }
 }

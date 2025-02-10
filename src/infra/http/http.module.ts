@@ -63,7 +63,7 @@ import { FetchResponsibleBirthdaysOfTheMonthController } from './controllers/res
 import { FetchResponsibleBirthdaysOfTheMonthUseCase } from '@/domain/project/application/use-cases/fetch-responsible-birthdays-of-the-month'
 import { PbiModule } from '../pbi/pbi.module'
 import { CreateReportController } from './controllers/report/create-report.controller'
-import { CreateReportUseCase } from '@/domain/project/application/use-cases/create-Report'
+import { CreateReportUseCase } from '@/domain/project/application/use-cases/create-report'
 import { FetchReportUseCase } from '@/domain/project/application/use-cases/fetch-report'
 import { FetchReportsUseCase } from '@/domain/project/application/use-cases/fetch-reports-customer'
 import { FetchReportPbiController } from './controllers/report/fetch-report-pbi.controller'
@@ -73,7 +73,7 @@ import { SuspendPbiCapacityController } from './controllers/report/suspend-pbi-c
 import { FetchAllProjectUpdatesController } from './controllers/project-updates/fetch-all-project-updates.controller'
 import { FetchAllProjectUpdatesUseCase } from '@/domain/project/application/use-cases/fetch-all-project-updates'
 import { ValidateCustomerController } from './controllers/customer/validate-customer.controller'
-import { ValidateCustomerUseCase } from '@/domain/project/application/use-cases/Validate-customer'
+import { ValidateCustomerUseCase } from '@/domain/project/application/use-cases/validate-customer'
 import { FetchCustomersWithUsersController } from './controllers/customer/fetch-customer-with-users.controller'
 import { FetchCustomersWithUsersUseCase } from '@/domain/project/application/use-cases/fetch-customers-with-users'
 import { CreateCustomerAddressController } from './controllers/customer-address/create-customer-address.controller'
@@ -139,6 +139,61 @@ import { RemoveListProjectUseCase } from '@/domain/project/application/use-cases
 import { UpdateOrderListProjectController } from './controllers/list-project/update-order-list-project.controller'
 import { UpdateOrderListProjectUseCase } from '@/domain/project/application/use-cases/update-order-list-project'
 import { UpdateProjectController } from './controllers/project/update-project.controller'
+import { UpdateBudgetExpenseController } from './controllers/budget-expenses/update-budget-expense.controller'
+import { UpdateBudgetExpenseUseCase } from '@/domain/project/application/use-cases/update-budget-expense'
+import { RemoveBudgetExpenseController } from './controllers/budget-expenses/remove-budget-expense.controller'
+import { RemoveBudgetExpenseUseCase } from '@/domain/project/application/use-cases/remove-budget-expense'
+import { FetchStatisticsController } from './controllers/project/fetch-statistics-done-all-projects.controller'
+import { FetchProjectByStatusAndCustomerUseCase } from '@/domain/project/application/use-cases/fetch-project-by-status-and-customer'
+import { FetchStatisticsProjectsCustomerController } from './controllers/project/fetch-statistics-projects-customer.controller'
+import { CreateTagController } from './controllers/tags/create-tag.controller'
+import { CreateTagUseCase } from '@/domain/project/application/use-cases/create-tag'
+import { UpdateTagController } from './controllers/tags/update-tag.controller'
+import { UpdateTagUseCase } from '@/domain/project/application/use-cases/update-tag'
+import { RemoveTagUseCase } from '@/domain/project/application/use-cases/remove-tag'
+import { RemoveTagController } from './controllers/tags/remove-tag.controller'
+import { FetchTagByCustomerController } from './controllers/tags/fetch-tags-by-customer.controller'
+import { FetchTagsByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-tags-by-customer'
+import { AddTagToProjectController } from './controllers/project/add-tag-to-project.controller'
+import { AddTagToProjectUseCase } from '@/domain/project/application/use-cases/add-tag-project'
+import { FetchTagByIdUseCase } from '@/domain/project/application/use-cases/fetch-tag-by-id'
+import { RemoveTagFromProjectController } from './controllers/project/remove-tag-from-project.controller'
+import { RemoveTagFromProjectUseCase } from '@/domain/project/application/use-cases/remove-tag-project'
+import { SearchTagByCustomerController } from './controllers/tags/search-tag.controller'
+import { SearchTagByNameAndCustomerUseCase } from '@/domain/project/application/use-cases/search-tag-by-name-and-customer'
+import { CreateCommentController } from './controllers/comment/create-comment.controller'
+import { CreateCommentUseCase } from '@/domain/project/application/use-cases/create-comment'
+import { RemoveCommentUseCase } from '@/domain/project/application/use-cases/remove-comment'
+import { RemoveCommentController } from './controllers/comment/remove-comment.controller'
+import { UpdateCommentController } from './controllers/comment/update-comment.controller'
+import { UpdateCommentUseCase } from '@/domain/project/application/use-cases/update-comment'
+import { FetchProjectUpdateByProjectUseCase } from '@/domain/project/application/use-cases/fetch-project-updates-by-project'
+import { FetchActivesProjectUpdatesByProjectController } from './controllers/project-updates/fetch-actives-project-updates-by-project.controller'
+import { CreateReactionCommentController } from './controllers/reactions/create-reaction-comment.controller'
+import { CreateReactionCommentUseCase } from '@/domain/project/application/use-cases/create-reaction-comment'
+import { CreateReactionProjectUpdateUseCase } from '@/domain/project/application/use-cases/create-reaction-project-update'
+import { CreateReactionProjectUpdateController } from './controllers/reactions/create-reaction-project-update.controller'
+import { RemoveReactionCommentController } from './controllers/reactions/remove-reaction-comment.controller'
+import { RemoveReactionCommentUseCase } from '@/domain/project/application/use-cases/remove-reaction-comment'
+import { RemoveReactionProjectUpdateController } from './controllers/reactions/remove-reaction-project-update.controller'
+import { RemoveReactionProjectUpdateUseCase } from '@/domain/project/application/use-cases/remove-reaction-project-update'
+import { UpdateProjectNameController } from './controllers/project/update-project-name.controller'
+import { UpdateProjectNameUseCase } from '@/domain/project/application/use-cases/update-project-name'
+import { FetchListProjectsByCustomerAndDateUseCase } from '@/domain/project/application/use-cases/fetch-list-projects-by-customer-and-date'
+import { FetchListProjectsByCustomerAndDateController } from './controllers/list-project/fetch-list-project-by-customer-and-date.controller'
+import { FetchPeriodicReportsByCustomerController } from './controllers/periodic-reports/fetch-periodic-reports-by-customer.controller'
+import { FetchPeriodicReportsByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-customer'
+import { FetchPeriodicReportsByCustomerAndYearUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-customer-and-year'
+import { FetchPeriodicReportsByCustomerAndYearController } from './controllers/periodic-reports/fetch-periodic-reports-by-customer-and-year.controller'
+import { CountUsersAndCustomersController } from './controllers/customer/count-customers-and-users.controller'
+import { CountUsersAndCustomersUseCase } from '@/domain/project/application/use-cases/count-users-and-customers'
+import { FetchActiveResponsiblePartiesUseCase } from '@/domain/project/application/use-cases/fetch-active-responsible-parties'
+import { FetchActivesReponsiblesController } from './controllers/responsibleParties/fetch-all-responsible-parties.controller'
+import { FetchAllPeriodicReportsController } from './controllers/periodic-reports/fetch-all-periodic-reports.controller'
+import { FetchAllPeriodicReportsUseCase } from '@/domain/project/application/use-cases/fetch-all-periodic-reports'
+import { FetchBudgetExpenseBalanceAllCustomersController } from './controllers/budget-expenses/fetch-budget-expense-balance-all-customers.controller'
+import { FetchOverdueProjectsController } from './controllers/project/fetch-overdue-projects.controller'
+import { FetchOverdueProjectsUseCase } from '@/domain/project/application/use-cases/fetch-overdue-projects'
 
 @Module({
   imports: [
@@ -150,6 +205,11 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     StorageModule,
   ],
   controllers: [
+    FetchOverdueProjectsController,
+    FetchBudgetExpenseBalanceAllCustomersController,
+    FetchAllPeriodicReportsController,
+    CountUsersAndCustomersController,
+    FetchActivesReponsiblesController,
     AuthenticateController,
     CreateCustomerController,
     FetchCustomerController,
@@ -158,7 +218,6 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     FetchCustomersController,
     FetchCustomersWithUsersController,
     FetchCustomerUsersController,
-
     RemoveCustomerController,
     UpdateCustomerController,
     CreateInternalUserController,
@@ -206,6 +265,8 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     FetchBudgetExpenseByProjectController,
     FetchBudgetExpenseController,
     FetchBudgetExpenseByCustomerController,
+    UpdateBudgetExpenseController,
+    RemoveBudgetExpenseController,
     PeriodicReportController,
     FetchPeriodicReportsByUserController,
     FetchPeriodicReportsByYearController,
@@ -220,8 +281,30 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     RemoveListProjectController,
     UpdateOrderListProjectController,
     UpdateProjectController,
+    FetchStatisticsController,
+    FetchStatisticsProjectsCustomerController,
+    CreateTagController,
+    UpdateTagController,
+    RemoveTagController,
+    FetchTagByCustomerController,
+    AddTagToProjectController,
+    RemoveTagFromProjectController,
+    SearchTagByCustomerController,
+    CreateCommentController,
+    RemoveCommentController,
+    UpdateCommentController,
+    FetchActivesProjectUpdatesByProjectController,
+    CreateReactionCommentController,
+    CreateReactionProjectUpdateController,
+    RemoveReactionCommentController,
+    RemoveReactionProjectUpdateController,
+    UpdateProjectNameController,
+    FetchListProjectsByCustomerAndDateController,
+    FetchPeriodicReportsByCustomerController,
+    FetchPeriodicReportsByCustomerAndYearController,
   ],
   providers: [
+    FetchOverdueProjectsUseCase,
     AuthenticateUserUseCase,
     CreateCustomerUseCase,
     FetchCostumersByStatusUseCase,
@@ -288,6 +371,32 @@ import { UpdateProjectController } from './controllers/project/update-project.co
     AddProjectListProjectUseCase,
     RemoveListProjectUseCase,
     UpdateOrderListProjectUseCase,
+    UpdateBudgetExpenseUseCase,
+    RemoveBudgetExpenseUseCase,
+    FetchProjectByStatusAndCustomerUseCase,
+    FetchProjectUpdateByProjectUseCase,
+    CreateTagUseCase,
+    UpdateTagUseCase,
+    RemoveTagUseCase,
+    FetchTagsByCustomerUseCase,
+    AddTagToProjectUseCase,
+    FetchTagByIdUseCase,
+    RemoveTagFromProjectUseCase,
+    SearchTagByNameAndCustomerUseCase,
+    CreateCommentUseCase,
+    RemoveCommentUseCase,
+    UpdateCommentUseCase,
+    CreateReactionCommentUseCase,
+    CreateReactionProjectUpdateUseCase,
+    RemoveReactionCommentUseCase,
+    RemoveReactionProjectUpdateUseCase,
+    UpdateProjectNameUseCase,
+    FetchListProjectsByCustomerAndDateUseCase,
+    FetchPeriodicReportsByCustomerUseCase,
+    FetchPeriodicReportsByCustomerAndYearUseCase,
+    CountUsersAndCustomersUseCase,
+    FetchActiveResponsiblePartiesUseCase,
+    FetchAllPeriodicReportsUseCase,
   ],
 })
 export class HttpModule {}

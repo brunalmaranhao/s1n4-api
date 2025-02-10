@@ -30,7 +30,6 @@ export class UpdateProjectUseCase {
     if (!projectExists) {
       return left(new ProjectNotFoundError())
     }
-    console.log(project?.budget)
 
     const updatedProject = await this.projectRepository.update(id, project)
 

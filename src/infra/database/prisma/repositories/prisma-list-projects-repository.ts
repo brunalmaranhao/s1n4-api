@@ -52,6 +52,9 @@ export class PrismaListProjectRepository implements ListProjectRepository {
       where: {
         id,
       },
+      include: {
+        projects: true,
+      },
     })
 
     if (!list) {
@@ -59,6 +62,49 @@ export class PrismaListProjectRepository implements ListProjectRepository {
     }
 
     return PrismaListProjectsMapper.toDomainWithProjects(list)
+  }
+
+  async findByCustomerIdAndDate(
+    customerId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ListProjects[]> {
+    const listProjects = await this.prisma.listProjects.findMany({
+      where: {
+        customerId,
+        status: 'ACTIVE',
+      },
+      orderBy: {
+        order: 'asc',
+      },
+      include: {
+        projects: {
+          where: {
+            status: {
+              not: 'INACTIVE',
+            },
+            start: {
+              gte: startDate, // Filtro para garantir que a data de início seja após a data de startDate
+              lte: endDate, // Filtro para garantir que a data de início seja antes da data de endDate
+            },
+          },
+          include: {
+            customer: true,
+            tags: {
+              where: {
+                status: 'ACTIVE',
+              },
+              orderBy: {
+                createdAt: 'asc',
+              },
+            },
+            listProjects: true,
+          },
+        },
+      },
+    })
+
+    return listProjects.map(PrismaListProjectsMapper.toDomainWithProjects)
   }
 
   async findByCustomerId(customerId: string): Promise<ListProjects[]> {
@@ -73,10 +119,25 @@ export class PrismaListProjectRepository implements ListProjectRepository {
       include: {
         projects: {
           where: {
-            status: 'ACTIVE',
+            status: {
+              not: 'INACTIVE',
+            },
           },
           include: {
-            customer: true,
+            customer: {
+              include: {
+                responsibleParties: true,
+              },
+            },
+            tags: {
+              where: {
+                status: 'ACTIVE',
+              },
+              orderBy: {
+                createdAt: 'asc',
+              },
+            },
+            listProjects: true,
           },
         },
       },

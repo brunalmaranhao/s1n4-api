@@ -15,6 +15,13 @@ export class InMemoryCustomerRepository implements CustomerRepository {
     return this.items
   }
 
+  async countActiveCustomers(): Promise<number> {
+    const customers = this.items.filter(
+      (customer) => customer.status === 'ACTIVE',
+    )
+    return customers.length
+  }
+
   async findByName(name: string): Promise<Customer | null> {
     const customer = this.items.find((item) => item.name === name)
 

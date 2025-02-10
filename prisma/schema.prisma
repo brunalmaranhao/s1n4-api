@@ -26,6 +26,8 @@ model User {
   projectUpdates     ProjectUpdates[]
   notifications      Notification[]
   verificationTokens VerificationToken[]
+  comments           Comments[]
+  reactions          Reaction[]          @relation("userReactions")
 
   @@map("users")
 }
@@ -40,6 +42,7 @@ model ListProjects {
   order      Int       @default(0)
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
+  isDone     Boolean   @default(false)
 
   @@map("list_projects")
 }
@@ -65,6 +68,7 @@ model Customer {
   reports               Report[]
   address               CustomerAddress[]
   ListProjects          ListProjects[]
+  tags                  Tag[]
 
   @@map("customers")
 }
@@ -119,25 +123,42 @@ model ResponsibleParties {
   @@map("responsible_parties")
 }
 
+model Tag {
+  id         String    @id @default(uuid())
+  name       String
+  color      String
+  status     Status
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  customerId String
+  createdAt  DateTime
+  updatedAt  DateTime?
+  projects   Project[]
+
+  @@map("tags")
+}
+
 model Project {
-  id                   String            @id @default(uuid())
-  name                 String            
-  deadline             DateTime?
-  status               Status
-  customer             Customer          @relation(fields: [customerId], references: [id])
-  customerId           String
-  createdAt            DateTime
-  updatedAt            DateTime?
-  updatedListProjectAt DateTime?
-  budget               Float?
-  // integration    Integration[]
-  historyLog           HistoryLog[]
-  projectUpdates       ProjectUpdates[]
-  budgetExpenses       BudgetExpense[]
-  periodicReports      PeriodicReports[]
-  listProjects         ListProjects      @relation(fields: [listProjectsId], references: [id])
-  listProjectsId       String
-  shouldShowInformationsToCustomerUser Boolean @default(true)
+  id                                   String            @id @default(uuid())
+  name                                 String
+  start                                DateTime?
+  deadline                             DateTime?
+  status                               StatusProject
+  customer                             Customer          @relation(fields: [customerId], references: [id])
+  customerId                           String
+  createdAt                            DateTime
+  updatedAt                            DateTime?
+  updatedListProjectAt                 DateTime?
+  budget                               Float?
+  historyLog                           HistoryLog[]
+  projectUpdates                       ProjectUpdates[]
+  budgetExpenses                       BudgetExpense[]
+  periodicReports                      PeriodicReports[]
+  listProjects                         ListProjects      @relation(fields: [listProjectsId], references: [id])
+  listProjectsId                       String
+  shouldShowInformationsToCustomerUser Boolean           @default(true)
+  finishedAt                           DateTime?
+  tags                                 Tag[]
+  description                          String?
 
   @@map("projects")
 }
@@ -148,8 +169,9 @@ model BudgetExpense {
   description String?
   amount      Float
   createdAt   DateTime @default(now())
-  project     Project  @relation(fields: [projectId], references: [id])
   projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  status      Status   @default(ACTIVE)
 
   @@map("budget_expenses")
 }
@@ -165,8 +187,54 @@ model ProjectUpdates {
   updatedAt     DateTime?
   status        Status
   notifications Notification[]
+  comments      Comments[]
+  reactions     Reaction[]
 
   @@map("project_updates")
+}
+
+model Reaction {
+  id              String          @id @default(uuid())
+  userId          String
+  projectUpdateId String?
+  commentId       String?
+  emojiId         String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime?       @updatedAt
+  status          Status
+  messageId       String?
+  comment         Comments?       @relation(fields: [commentId], references: [id])
+  emoji           Emoji           @relation(fields: [emojiId], references: [id])
+  post            ProjectUpdates? @relation(fields: [projectUpdateId], references: [id])
+  user            User            @relation("userReactions", fields: [userId], references: [id])
+
+  @@unique([userId, projectUpdateId])
+  @@unique([userId, commentId])
+}
+
+model Emoji {
+  id        String     @id @default(uuid())
+  unified   String     @unique
+  name      String
+  category  String
+  char      String?
+  reactions Reaction[]
+}
+
+model Comments {
+  id              String    @id @default(uuid())
+  content         String
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+  authorId        String    @map("author_id")
+  projectUpdateId String    @map("project_update_id")
+  status          Status
+
+  author        User           @relation(fields: [authorId], references: [id])
+  projectUpdate ProjectUpdates @relation(fields: [projectUpdateId], references: [id])
+  reactions     Reaction[]
+
+  @@map("comments")
 }
 
 model Notification {
@@ -283,12 +351,9 @@ enum ResponsiblePartiesRole {
 }
 
 enum StatusProject {
-  APPROVED
-  DISAPPROVED
-  WAITING
-  CANCELED
+  ACTIVE
+  INACTIVE
   DONE
-  IN_PROGRESS
 }
 
 enum PaymentMethod {

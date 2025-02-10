@@ -12,6 +12,7 @@ export class ProjectPresenter {
       updatedAt: project.updatedAt,
       customer: project.customer,
       budget: project.budget,
+      tags: project.tags,
     }
   }
 }

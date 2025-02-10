@@ -1,7 +1,11 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
-import { ResponsiblePartiesRole, Status } from '@prisma/client'
+import {
+  Customer as PrismaCustomer,
+  ResponsiblePartiesRole,
+  Status,
+} from '@prisma/client'
 
 export interface ResponsiblePartiesProps {
   firstName: string
@@ -14,9 +18,14 @@ export interface ResponsiblePartiesProps {
   updatedAt?: Date | null
   customerId: UniqueEntityID
   responsiblePartiesRole: ResponsiblePartiesRole[]
+  customer?: PrismaCustomer | null
 }
 
 export class ResponsibleParties extends Entity<ResponsiblePartiesProps> {
+  get customer() {
+    return this.props.customer
+  }
+
   get responsiblePartiesRole() {
     return this.props.responsiblePartiesRole
   }

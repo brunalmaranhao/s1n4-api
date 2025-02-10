@@ -1,4 +1,4 @@
-import { BudgetExpense } from '@/domain/project/enterprise/entities/BudgetExpense'
+import { BudgetExpense } from '@/domain/project/enterprise/entities/budgetExpense'
 
 export class BudgetExpensePresenter {
   static toHTTP(budgetExpense: BudgetExpense) {
@@ -17,6 +17,7 @@ export class BudgetExpensePresenter {
         id: budgetExpense.project?.customer.id,
         name: budgetExpense.project?.customer.name,
       },
+      status: budgetExpense.status,
     }
   }
 }

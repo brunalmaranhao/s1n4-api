@@ -5,6 +5,21 @@ import { ListProjects } from '@/domain/project/enterprise/entities/listProjects'
 export class InMemoryListProjectsRepository implements ListProjectRepository {
   public items: ListProjects[] = []
 
+  async findByCustomerIdAndDate(
+    customerId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ListProjects[]> {
+    const listProjects = this.items.filter((listProject) => {
+      return (
+        listProject.customerId.toString() === customerId &&
+        listProject.status === 'ACTIVE'
+      )
+    })
+
+    return listProjects
+  }
+
   async findByCustomerId(customerId: string): Promise<ListProjects[]> {
     const listProjects = this.items.filter(
       (listProject) => listProject.customerId.toString() === customerId,

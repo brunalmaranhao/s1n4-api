@@ -1,18 +1,18 @@
 import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
-import { Status } from '@prisma/client'
+import { StatusProject } from '@prisma/client'
 import { Project } from '../../enterprise/entities/project'
 import { ProjectRepository } from '../repositories/project-repository'
 
 interface FetchProjectByStatusUseCaseRequest {
-  page: number
-  status: Status
+  status: StatusProject
 }
 
 type FetchProjectByStatusUseCaseResponse = Either<
   null,
   {
     projects: Project[]
+    total: number
   }
 >
 
@@ -22,14 +22,13 @@ export class FetchProjectByStatusUseCase {
 
   async execute({
     status,
-    page,
   }: FetchProjectByStatusUseCaseRequest): Promise<FetchProjectByStatusUseCaseResponse> {
-    const projects = await this.projectRepository.fetchByStatus(status, {
-      page,
-    })
+    const response = await this.projectRepository.findByStatus(status)
+    // console.log(response)
 
     return right({
-      projects,
+      projects: response.projects,
+      total: response.total,
     })
   }
 }

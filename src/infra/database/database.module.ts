@@ -26,6 +26,14 @@ import { PeriodicReportRepository } from '@/domain/project/application/repositor
 import { PrismaPeriodicReportsRepository } from './prisma/repositories/prisma-periodic-report-repository'
 import { ListProjectRepository } from '@/domain/project/application/repositories/list-projects-repository'
 import { PrismaListProjectRepository } from './prisma/repositories/prisma-list-projects-repository'
+import { TagRepository } from '@/domain/project/application/repositories/tag-repository'
+import { PrismaTagRepository } from './prisma/repositories/prisma-tag-repository'
+import { CommentRepository } from '@/domain/project/application/repositories/comment-repository'
+import { PrismaCommentRepository } from './prisma/repositories/prisma-comment-repository'
+import { ReactionRepository } from '@/domain/project/application/repositories/reaction-repository'
+import { PrismaReactionRepository } from './prisma/repositories/prisma-reaction-repository'
+import { EmojiRepository } from '@/domain/project/application/repositories/emoji-repository'
+import { PrismaEmojiRepository } from './prisma/repositories/prisma-emoji-repository'
 
 @Module({
   providers: [
@@ -88,6 +96,22 @@ import { PrismaListProjectRepository } from './prisma/repositories/prisma-list-p
       provide: ListProjectRepository,
       useClass: PrismaListProjectRepository,
     },
+    {
+      provide: TagRepository,
+      useClass: PrismaTagRepository,
+    },
+    {
+      provide: CommentRepository,
+      useClass: PrismaCommentRepository,
+    },
+    {
+      provide: ReactionRepository,
+      useClass: PrismaReactionRepository,
+    },
+    {
+      provide: EmojiRepository,
+      useClass: PrismaEmojiRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -104,6 +128,10 @@ import { PrismaListProjectRepository } from './prisma/repositories/prisma-list-p
     BudgetExpenseRepository,
     PeriodicReportRepository,
     ListProjectRepository,
+    TagRepository,
+    CommentRepository,
+    EmojiRepository,
+    ReactionRepository,
   ],
 })
 export class DatabaseModule {}

@@ -5,6 +5,7 @@ export abstract class PeriodicReportRepository {
   abstract create(report: PeriodicReport): Promise<PeriodicReport>
   abstract findById(reportId: string): Promise<PeriodicReport | null>
   abstract findAll({ page, size }: PaginationParams): Promise<PeriodicReport[]>
+  abstract findAllWithoutPagination(): Promise<PeriodicReport[]>
 
   abstract findByName(name: string): Promise<PeriodicReport | null>
   abstract findByMonthAndYearProjectId(

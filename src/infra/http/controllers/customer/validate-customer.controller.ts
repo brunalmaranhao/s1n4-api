@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common'
 import { Roles } from '@/infra/auth/roles.decorator'
-import { ValidateCustomerUseCase } from '@/domain/project/application/use-cases/Validate-customer'
+import { ValidateCustomerUseCase } from '@/domain/project/application/use-cases/validate-customer'
 import { ValidateCustomerDto } from './dto/validate-dto'
 import { ExistCustomerSameCnpjError } from '@/domain/project/application/use-cases/errors/exist-customer-same-cnpj-error'
 import { ExistCustomerSameNameError } from '@/domain/project/application/use-cases/errors/exist-customer-same-name-error'
@@ -53,7 +53,7 @@ export class ValidateCustomerController {
 
     if (result.isLeft()) {
       const error = result.value
-
+      console.log(error)
       switch (error.constructor) {
         case ExistCustomerSameCnpjError:
           throw new ConflictException({

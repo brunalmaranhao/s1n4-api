@@ -23,6 +23,7 @@ const updateProjectBodySchema = z
     updatedAt: z.coerce.date().optional(),
     budget: z.number().optional(),
     shouldShowInformationsToCustomerUser: z.boolean().optional(),
+    finishedAt: z.coerce.date().optional(),
   })
   .refine(
     (data) => {
@@ -59,6 +60,7 @@ export class UpdateProjectController {
       updatedAt,
       budget,
       shouldShowInformationsToCustomerUser,
+      finishedAt,
     } = body
 
     const project: EditProjectProps = {
@@ -68,6 +70,7 @@ export class UpdateProjectController {
       updatedAt: updatedAt ?? undefined,
       budget,
       shouldShowInformationsToCustomerUser,
+      finishedAt: finishedAt ?? undefined,
     }
 
     const result = await this.updateProjectUseCase.execute({

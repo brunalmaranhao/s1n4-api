@@ -30,4 +30,6 @@ export abstract class CustomerRepository {
     page,
     size,
   }: PaginationParams): Promise<Customer[]>
+
+  abstract countActiveCustomers(): Promise<number>
 }

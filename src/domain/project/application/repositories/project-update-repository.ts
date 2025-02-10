@@ -19,5 +19,7 @@ export abstract class ProjectUpdateRepository {
     status: Status,
   ): Promise<ProjectUpdate[]>
 
+  abstract fetchByProjectId(projectId: string): Promise<ProjectUpdate[]>
+
   abstract remove(id: string): Promise<void>
 }

@@ -1,5 +1,6 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
-import { BudgetExpense } from '../../enterprise/entities/BudgetExpense'
+import { BudgetExpense } from '../../enterprise/entities/budgetExpense'
+import { UpdateBudgetExpenseProps } from '@/core/types/budget-expense-props'
 
 export abstract class BudgetExpenseRepository {
   abstract create(budgetExpense: BudgetExpense): Promise<BudgetExpense>
@@ -16,4 +17,10 @@ export abstract class BudgetExpenseRepository {
 
   abstract fetchByProjectId(projectId: string): Promise<BudgetExpense[]>
   abstract fetchByCustomerId(customerId: string): Promise<BudgetExpense[]>
+  abstract update(
+    budgetExpenseId: string,
+    payload: UpdateBudgetExpenseProps,
+  ): Promise<BudgetExpense>
+
+  abstract remove(id: string): Promise<void>
 }
