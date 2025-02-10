@@ -1,8 +1,13 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
-import { Status, UserRoles, Customer as PrismaCustomer } from '@prisma/client'
 import { Customer } from './customer'
+import {
+  Status,
+  UserRoles,
+  Customer as PrismaCustomer,
+  Department as PrismaDepartment,
+} from '@prisma/client'
 
 export interface UserProps {
   firstName: string
@@ -15,9 +20,14 @@ export interface UserProps {
   status: Status
   customerId?: UniqueEntityID | null
   customer?: Customer | PrismaCustomer | null
+  department?: PrismaDepartment | null
 }
 
 export class User extends Entity<UserProps> {
+  get department() {
+    return this.props.department
+  }
+
   get customer() {
     return this.props.customer
   }

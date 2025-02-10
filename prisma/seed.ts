@@ -5,13 +5,14 @@ import { EmojisSeeder } from './seeders/emojis'
 const prisma = new PrismaClient()
 
 async function main() {
-  // const { createAdminUser, newCustomers } =
-  //   await CreateInitialDataSeeder(prisma)
-  // newCustomers();
-  // createAdminUser()
+  const { createAdminUser, newCustomers, createDepartments } =
+    await CreateInitialDataSeeder(prisma)
+  // await createDepartments()
+  // await newCustomers()
+  await createAdminUser()
 
-  const { createEmojis } = await EmojisSeeder(prisma)
-  await createEmojis()
+  // const { createEmojis } = await EmojisSeeder(prisma)
+  // await createEmojis()
 }
 
 main()

@@ -4,6 +4,7 @@ import { ProjectPresenter } from '../../presenter/project-presenter'
 import { CurrentUser } from '@/infra/auth/currrent-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { FetchOverdueProjectsUseCase } from '@/domain/project/application/use-cases/fetch-overdue-projects'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 @ApiTags('project')
 @Controller('/projects/overdue')
@@ -19,6 +20,7 @@ export class FetchOverdueProjectsController {
     required: false,
     description: 'ID do cliente para filtrar projetos vencidos',
   })
+  @Permissions(['VIEW_PROJECT'])
   async handle(
     @CurrentUser() user: UserPayload,
     @Query('customerId') customerId?: string,

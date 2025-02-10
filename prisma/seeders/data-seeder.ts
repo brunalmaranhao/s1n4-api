@@ -1,21 +1,53 @@
-import { PrismaClient } from "@prisma/client";
-import { hash } from "bcryptjs";
-import { faker } from "@faker-js/faker";
+import { PrismaClient } from '@prisma/client'
+import { hash } from 'bcryptjs'
+import { faker } from '@faker-js/faker'
 
 export async function CreateInitialDataSeeder(prisma: PrismaClient) {
+  async function createDepartments() {
+    const names = [
+      'Projetos',
+      'Redes',
+      'Marketing',
+      'Produção',
+      'Compras',
+      'Contratos',
+      'Jurídico',
+      'Financeiro',
+      'Estoque',
+      'Promo',
+    ]
+
+    for (const name of names) {
+      await prisma.department.create({
+        data: {
+          name,
+          permissions: [
+            'CREATE_COMMENT',
+            'CREATE_REACTION',
+            'VIEW_FINANCIAL',
+            'VIEW_PROJECT',
+            'VIEW_REPORT',
+          ],
+          status: 'ACTIVE',
+        },
+      })
+    }
+  }
   async function createAdminUser() {
-    const hashedPassword = await hash("admin", 8);
+    const department = await prisma.department.findFirst()
+    const hashedPassword = await hash('admin', 8)
     await prisma.user.create({
       data: {
-        firstName: "Yuri",
-        lastName: "Muniz",
+        firstName: 'Yuri',
+        lastName: 'Muniz',
         password: hashedPassword,
-        email: "yuri@gruposina.com",
-        role: "INTERNAL_MANAGEMENT",
+        email: 'yuri@gruposina.com',
+        role: 'INTERNAL_MANAGEMENT',
         createdAt: new Date(),
-        status: "ACTIVE",
+        status: 'ACTIVE',
+        departmentId: department?.id,
       },
-    });
+    })
 
     // await prisma.user.create({
     //   data: {
@@ -70,12 +102,12 @@ export async function CreateInitialDataSeeder(prisma: PrismaClient) {
           name: `Customer ${x}`,
           cnpj: `100012132/00${x}`,
           corporateName: `Name Customer ${x}`,
-          contractDuration: "12 meses",
+          contractDuration: '12 meses',
           contractValue: 100000,
-          status: "ACTIVE",
+          status: 'ACTIVE',
           createdAt: new Date(),
         },
-      });
+      })
 
       await prisma.customerAddress.create({
         data: {
@@ -88,12 +120,13 @@ export async function CreateInitialDataSeeder(prisma: PrismaClient) {
           number: x.toString(),
           customerId: customer.id,
         },
-      });
+      })
     }
   }
 
   return {
     createAdminUser,
     newCustomers,
-  };
+    createDepartments,
+  }
 }

@@ -14,6 +14,7 @@ import { CreateCommentUseCase } from '@/domain/project/application/use-cases/cre
 import { CreateCommentDto } from './dto/create-comment-dto'
 import { CurrentUser } from '@/infra/auth/currrent-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 const createCommentBodySchema = z.object({
   content: z.string(),
@@ -29,6 +30,7 @@ export class CreateCommentController {
 
   @Post()
   @HttpCode(201)
+  @Permissions(['CREATE_COMMENT'])
   async handle(
     @Body(bodyValidationPipe) body: CreateCommentDto,
     @CurrentUser() user: UserPayload,
