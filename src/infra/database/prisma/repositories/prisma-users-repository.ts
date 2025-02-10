@@ -74,6 +74,7 @@ export class PrismaUsersRepository implements UserRepository {
       },
       include: {
         customer: true,
+        department: true,
       },
     })
 
@@ -89,13 +90,17 @@ export class PrismaUsersRepository implements UserRepository {
       where: {
         email,
       },
+      include: {
+        customer: true,
+        department: true,
+      },
     })
 
     if (!user) {
       return null
     }
 
-    return PrismaUserMapper.toDomain(user)
+    return PrismaUserMapper.toDomainWithCustomer(user)
   }
 
   async create(user: User): Promise<User> {

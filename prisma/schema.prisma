@@ -28,6 +28,8 @@ model User {
   verificationTokens VerificationToken[]
   comments           Comments[]
   reactions          Reaction[]          @relation("userReactions")
+  department         Department?         @relation(fields: [departmentId], references: [id])
+  departmentId       String?
 
   @@map("users")
 }
@@ -161,6 +163,28 @@ model Project {
   description                          String?
 
   @@map("projects")
+}
+
+model Department {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  users       User[]
+  permissions Permission[]
+  status      Status
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("departments")
+}
+
+enum Permission {
+  VIEW_REPORT
+  VIEW_PROJECT
+  VIEW_FINANCIAL
+  CREATE_COMMENT
+  CREATE_REACTION
 }
 
 model BudgetExpense {

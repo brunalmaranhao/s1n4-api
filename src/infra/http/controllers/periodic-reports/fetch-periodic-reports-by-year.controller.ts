@@ -11,6 +11,7 @@ import { CurrentUser } from '@/infra/auth/currrent-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { PeriodicReportPresenter } from '../../presenter/periodic-report'
 import { FetchPeriodicReportsByUserAndYearUseCase } from '@/domain/project/application/use-cases/fetch-period-report-by-user-and-year'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 @ApiTags('periodic-report')
 @Controller('/periodic-report/:year')
@@ -21,6 +22,7 @@ export class FetchPeriodicReportsByYearController {
 
   @Get()
   @HttpCode(200)
+  @Permissions(['VIEW_REPORT'])
   async handle(@CurrentUser() user: UserPayload, @Param('year') year: string) {
     const result = await this.fetchPeriodicReportsByCustomerUseCase.execute({
       userId: user.sub,

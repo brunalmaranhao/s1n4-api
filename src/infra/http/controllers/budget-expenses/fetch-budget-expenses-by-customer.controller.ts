@@ -9,6 +9,7 @@ import {
 import { Roles } from '@/infra/auth/roles.decorator'
 import { BudgetExpensePresenter } from '../../presenter/budget-expense'
 import { FetchBudgetsExpenseByCustomerUseCase } from '@/domain/project/application/use-cases/fetch-budgets-by-customer'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 @ApiTags('budget-expense')
 @Controller('/budget-expense/customer/:customerId')
@@ -27,6 +28,7 @@ export class FetchBudgetExpenseByCustomerController {
     'CLIENT_OWNER',
     'CLIENT_USER',
   ])
+  @Permissions(['VIEW_FINANCIAL'])
   async handle(@Param('customerId') customerId: string) {
     const result = await this.fetchBudgetsExpenseByCustomerUseCase.execute({
       customerId,
