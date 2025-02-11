@@ -49,8 +49,6 @@ export class AuthenticateUserUseCase {
       return left(new WrongCredentialsError())
     }
 
-    console.log(user.department?.permissions)
-
     const accessToken = await this.encrypter.encrypt({
       sub: user.id.toString(),
       role: user.role,
