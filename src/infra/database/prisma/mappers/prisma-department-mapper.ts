@@ -1,6 +1,6 @@
 import { Department as PrismaDepartment, Prisma } from '@prisma/client'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Department } from '@/domain/project/enterprise/entities/Department'
+import { Department } from '@/domain/project/enterprise/entities/department'
 
 export class PrismaDepartmentMapper {
   static toDomain(raw: PrismaDepartment): Department {
