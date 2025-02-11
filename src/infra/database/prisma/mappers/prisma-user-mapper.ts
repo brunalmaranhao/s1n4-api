@@ -41,6 +41,7 @@ export class PrismaUserMapper {
         createdAt: raw.createdAt,
         role: raw.role,
         customerId: new UniqueEntityID(raw.customerId),
+        departmentId: new UniqueEntityID(raw.departmentId),
       },
       new UniqueEntityID(raw.id),
     )
@@ -58,7 +59,7 @@ export class PrismaUserMapper {
       role: user.role ?? 'INTERNAL_MANAGEMENT',
       status: user.status,
       customerId: user.customerId?.toString(),
-      departmentId: user.department?.toString(),
+      departmentId: user.departmentId?.toString(),
     }
   }
 }

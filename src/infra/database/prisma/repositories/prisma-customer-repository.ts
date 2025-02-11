@@ -115,6 +115,7 @@ export class PrismaCustomersRepository implements CustomerRepository {
       },
       include: {
         projects: true,
+        users: true,
       },
     })
 
