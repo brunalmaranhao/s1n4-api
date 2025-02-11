@@ -23,6 +23,7 @@ const createUserBodySchema = z.object({
   password: z.string(),
   customerId: z.string(),
   role: UserRole,
+  departmentId: z.string(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createUserBodySchema)
@@ -40,7 +41,15 @@ export class CreateUserController {
     'INTERNAL_FINANCIAL_LEGAL',
   ])
   async handle(@Body(bodyValidationPipe) body: CreateCustomerDto) {
-    const { firstName, lastName, email, password, role, customerId } = body
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      customerId,
+      departmentId,
+    } = body
 
     const result = await this.createUserUseCase.execute({
       firstName,
@@ -49,6 +58,7 @@ export class CreateUserController {
       password,
       role,
       customerId,
+      departmentId,
     })
 
     if (result.isLeft()) {
