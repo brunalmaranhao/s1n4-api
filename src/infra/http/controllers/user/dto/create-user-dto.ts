@@ -22,6 +22,9 @@ export class CreateCustomerDto {
   @ApiProperty()
   customerId!: string
 
+  @ApiProperty()
+  departmentId!: string
+
   @ApiProperty({ enum: UserRoles, enumName: 'UserRoles' })
   role!: UserRoles
 }

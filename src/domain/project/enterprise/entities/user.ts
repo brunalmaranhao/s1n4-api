@@ -21,9 +21,14 @@ export interface UserProps {
   customerId?: UniqueEntityID | null
   customer?: Customer | PrismaCustomer | null
   department?: PrismaDepartment | null
+  departmentId?: UniqueEntityID | null
 }
 
 export class User extends Entity<UserProps> {
+  get departmentId() {
+    return this.props.departmentId
+  }
+
   get department() {
     return this.props.department
   }
