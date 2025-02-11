@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common'
 import { Roles } from '@/infra/auth/roles.decorator'
 import { FetchBudgetsExpenseBalanceUseCase } from '@/domain/project/application/use-cases/fetch-budget-expense-balance'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 @ApiTags('budget-expense')
 @Controller('/budget-expense/balance/customer/:customerId')
@@ -26,6 +27,7 @@ export class FetchBudgetExpenseBalanceByCustomerController {
     'CLIENT_OWNER',
     'CLIENT_USER',
   ])
+  @Permissions(['VIEW_FINANCIAL'])
   async handle(@Param('customerId') customerId: string) {
     const result = await this.fetchBudgetsExpenseBalanceUseCase.execute({
       customerId,

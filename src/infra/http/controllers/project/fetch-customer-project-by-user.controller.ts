@@ -11,6 +11,7 @@ import { ProjectPresenter } from '../../presenter/project-presenter'
 import { CurrentUser } from '@/infra/auth/currrent-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { FetchCustomerProjectsByUserUseCase } from '@/domain/project/application/use-cases/fetch-customer-projects-by-user'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 @ApiTags('project')
 @Controller('/projects/customer')
@@ -21,6 +22,7 @@ export class FetchCustomerProjectsByUserController {
 
   @Get()
   @HttpCode(200)
+  @Permissions(['VIEW_PROJECT'])
   async handle(@CurrentUser() user: UserPayload) {
     const result = await this.fetchCustomerProjectsByUserUseCase.execute({
       userId: user.sub,

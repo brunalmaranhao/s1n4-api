@@ -6,6 +6,7 @@ import { JwtAuthGuard } from './jwt.guard'
 import { EnvService } from '../env/env.service'
 import { EnvModule } from '../env/env.module'
 import { RolesGuard } from './roles.guard'
+import { PermissionsGuard } from './permissions.guard'
 
 @Module({
   imports: [
@@ -34,6 +35,11 @@ import { RolesGuard } from './roles.guard'
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
+
     JwtStrategy,
     EnvService,
   ],

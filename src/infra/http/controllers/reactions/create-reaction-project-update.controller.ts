@@ -14,6 +14,7 @@ import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { EmojiNotFoundError } from '@/domain/project/application/use-cases/errors/emoji-not-found-error'
 import { CreateReactionProjectUpdateUseCase } from '@/domain/project/application/use-cases/create-reaction-project-update'
 import { CreateReactionProjectUpdateDto } from './dto/create-reaction-project-update-dto'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 const createReactionProjectUpdateBodySchema = z.object({
   unified: z.string(),
@@ -33,6 +34,7 @@ export class CreateReactionProjectUpdateController {
 
   @Post()
   @HttpCode(201)
+  @Permissions(['CREATE_REACTION'])
   async handle(
     @Body(bodyValidationPipe) body: CreateReactionProjectUpdateDto,
     @CurrentUser() user: UserPayload,

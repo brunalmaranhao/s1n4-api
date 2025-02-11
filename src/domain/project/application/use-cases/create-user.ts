@@ -14,6 +14,7 @@ interface CreateUserUseCaseRequest {
   role: UserRoles
   customerId?: string
   password: string
+  departmentId?: string
 }
 
 type CreateUserUseCaseResponse = Either<
@@ -37,6 +38,7 @@ export class CreateUserUseCase {
     role,
     password,
     customerId,
+    departmentId,
   }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
     const existUser = await this.userRepository.findByEmail(email)
     if (existUser) {
@@ -49,6 +51,7 @@ export class CreateUserUseCase {
       firstName,
       lastName,
       password: hashedPassword,
+      departmentId: departmentId ? new UniqueEntityID(departmentId) : null,
       role,
       customerId: customerId ? new UniqueEntityID(customerId) : null,
     })

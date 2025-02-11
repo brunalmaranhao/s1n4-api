@@ -14,6 +14,7 @@ import { CreateReactionCommentDto } from './dto/create-reaction-comment-dto'
 import { CurrentUser } from '@/infra/auth/currrent-user.decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { EmojiNotFoundError } from '@/domain/project/application/use-cases/errors/emoji-not-found-error'
+import { Permissions } from '@/infra/auth/permissions.decorator'
 
 const createReactionCommentBodySchema = z.object({
   unified: z.string(),
@@ -33,6 +34,7 @@ export class CreateReactionCommentController {
 
   @Post()
   @HttpCode(201)
+  @Permissions(['CREATE_REACTION'])
   async handle(
     @Body(bodyValidationPipe) body: CreateReactionCommentDto,
     @CurrentUser() user: UserPayload,
