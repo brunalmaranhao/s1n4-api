@@ -9,7 +9,7 @@ async function main() {
     await CreateInitialDataSeeder(prisma)
   // await createDepartments()
   // await newCustomers()
-  await createAdminUser()
+  // await createAdminUser()
 
   // const { createEmojis } = await EmojisSeeder(prisma)
   // await createEmojis()
