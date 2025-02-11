@@ -38,7 +38,7 @@ export class CreateInternalUserController {
   @HttpCode(201)
   @Roles(['INTERNAL_MANAGEMENT'])
   async handle(@Body(bodyValidationPipe) body: CreateInternalUserDto) {
-    const { firstName, lastName, email, password, role } = body
+    const { firstName, lastName, email, password, role, departmentId } = body
 
     const result = await this.createUserUseCase.execute({
       firstName,
@@ -46,6 +46,7 @@ export class CreateInternalUserController {
       email,
       password,
       role,
+      departmentId,
     })
 
     if (result.isLeft()) {

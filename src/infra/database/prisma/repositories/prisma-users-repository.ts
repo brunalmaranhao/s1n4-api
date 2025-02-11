@@ -107,7 +107,10 @@ export class PrismaUsersRepository implements UserRepository {
     const data = PrismaUserMapper.toPrisma(user)
 
     const newUser = await this.prisma.user.create({
-      data,
+      data: {
+        ...data,
+        departmentId: data.departmentId,
+      },
     })
     return PrismaUserMapper.toDomain(newUser)
   }

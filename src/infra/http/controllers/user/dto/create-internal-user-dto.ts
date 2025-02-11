@@ -20,4 +20,7 @@ export class CreateInternalUserDto {
 
   @ApiProperty({ enum: UserRoles, enumName: 'UserRoles' })
   role!: UserRoles
+
+  @ApiProperty()
+  departmentId!: string
 }
