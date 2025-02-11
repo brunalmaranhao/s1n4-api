@@ -7,8 +7,8 @@ const prisma = new PrismaClient()
 async function main() {
   const { createAdminUser, newCustomers, createDepartments } =
     await CreateInitialDataSeeder(prisma)
-  // await createDepartments()
-  // await newCustomers()
+  await createDepartments()
+  await newCustomers()
   await createAdminUser()
 
   // const { createEmojis } = await EmojisSeeder(prisma)
