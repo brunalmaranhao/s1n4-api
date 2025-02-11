@@ -26,7 +26,11 @@ export interface UserProps {
 
 export class User extends Entity<UserProps> {
   get departmentId() {
-    return this.props.departmentId
+    return this.props.departmentId ?? null
+  }
+
+  set departmentId(departmentId: UniqueEntityID | null) {
+    this.props.departmentId = departmentId
   }
 
   get department() {
