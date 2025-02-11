@@ -34,6 +34,8 @@ import { ReactionRepository } from '@/domain/project/application/repositories/re
 import { PrismaReactionRepository } from './prisma/repositories/prisma-reaction-repository'
 import { EmojiRepository } from '@/domain/project/application/repositories/emoji-repository'
 import { PrismaEmojiRepository } from './prisma/repositories/prisma-emoji-repository'
+import { DepartmentRepository } from '@/domain/project/application/repositories/department'
+import { PrismaDepartmentRepository } from './prisma/repositories/prisma-department-repository'
 
 @Module({
   providers: [
@@ -112,6 +114,10 @@ import { PrismaEmojiRepository } from './prisma/repositories/prisma-emoji-reposi
       provide: EmojiRepository,
       useClass: PrismaEmojiRepository,
     },
+    {
+      provide: DepartmentRepository,
+      useClass: PrismaDepartmentRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -132,6 +138,7 @@ import { PrismaEmojiRepository } from './prisma/repositories/prisma-emoji-reposi
     CommentRepository,
     EmojiRepository,
     ReactionRepository,
+    DepartmentRepository,
   ],
 })
 export class DatabaseModule {}

@@ -194,6 +194,8 @@ import { FetchAllPeriodicReportsUseCase } from '@/domain/project/application/use
 import { FetchBudgetExpenseBalanceAllCustomersController } from './controllers/budget-expenses/fetch-budget-expense-balance-all-customers.controller'
 import { FetchOverdueProjectsController } from './controllers/project/fetch-overdue-projects.controller'
 import { FetchOverdueProjectsUseCase } from '@/domain/project/application/use-cases/fetch-overdue-projects'
+import { FetchDepartmentController } from './controllers/departments/fetch-department.controller'
+import { FetchDepartmentsUseCase } from '@/domain/project/application/use-cases/fetch-departments'
 
 @Module({
   imports: [
@@ -302,6 +304,7 @@ import { FetchOverdueProjectsUseCase } from '@/domain/project/application/use-ca
     FetchListProjectsByCustomerAndDateController,
     FetchPeriodicReportsByCustomerController,
     FetchPeriodicReportsByCustomerAndYearController,
+    FetchDepartmentController,
   ],
   providers: [
     FetchOverdueProjectsUseCase,
@@ -397,6 +400,7 @@ import { FetchOverdueProjectsUseCase } from '@/domain/project/application/use-ca
     CountUsersAndCustomersUseCase,
     FetchActiveResponsiblePartiesUseCase,
     FetchAllPeriodicReportsUseCase,
+    FetchDepartmentsUseCase,
   ],
 })
 export class HttpModule {}

@@ -14,7 +14,7 @@ interface CreateUserUseCaseRequest {
   role: UserRoles
   customerId?: string
   password: string
-  departmentId: string
+  departmentId?: string
 }
 
 type CreateUserUseCaseResponse = Either<
