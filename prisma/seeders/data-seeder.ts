@@ -48,24 +48,12 @@ export async function CreateInitialDataSeeder(prisma: PrismaClient) {
         departmentId: department?.id,
       },
     })
-
     await prisma.user.create({
       data: {
         firstName: 'Luiza',
-        lastName: 'Sina',
+        lastName: 'Lins',
         password: hashedPassword,
-        email: 'luiza@gruposina.com',
-        role: 'INTERNAL_MANAGEMENT',
-        createdAt: new Date(),
-        status: 'ACTIVE',
-      },
-    })
-    await prisma.user.create({
-      data: {
-        firstName: 'Raul',
-        lastName: 'Sina',
-        password: hashedPassword,
-        email: 'raul@gruposina.com',
+        email: 'luizacampelomkt@gmail.com',
         role: 'INTERNAL_MANAGEMENT',
         createdAt: new Date(),
         status: 'ACTIVE',
@@ -74,9 +62,9 @@ export async function CreateInitialDataSeeder(prisma: PrismaClient) {
     await prisma.user.create({
       data: {
         firstName: 'Luiz',
-        lastName: 'Sina',
+        lastName: 'Neto',
         password: hashedPassword,
-        email: 'luiz@gruposina.com',
+        email: 'luiz@gmail.com',
         role: 'INTERNAL_MANAGEMENT',
         createdAt: new Date(),
         status: 'ACTIVE',
@@ -84,10 +72,21 @@ export async function CreateInitialDataSeeder(prisma: PrismaClient) {
     })
     await prisma.user.create({
       data: {
-        firstName: 'Carol',
-        lastName: 'Sina',
+        firstName: 'Bruna',
+        lastName: 'Lins',
         password: hashedPassword,
-        email: 'carol@gruposina.com',
+        email: 'brnalmaranhao@gmail.com',
+        role: 'INTERNAL_MANAGEMENT',
+        createdAt: new Date(),
+        status: 'ACTIVE',
+      },
+    })
+    await prisma.user.create({
+      data: {
+        firstName: 'Suzane',
+        lastName: 'Lins',
+        password: hashedPassword,
+        email: 'suzanelins@hotmail.com',
         role: 'INTERNAL_MANAGEMENT',
         createdAt: new Date(),
         status: 'ACTIVE',

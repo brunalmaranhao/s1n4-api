@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 import { CreateInitialDataSeeder } from './seeders/data-seeder'
 import { EmojisSeeder } from './seeders/emojis'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const prisma = new PrismaClient()
 
