@@ -18,6 +18,7 @@ async function bootstrap() {
       'https://sina-web.vercel.app',
       'https://sina-web-5p44.vercel.app',
       'https://gruposina.com',
+      'https://s1n4-web.vercel.app'
     ],
 
     methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
